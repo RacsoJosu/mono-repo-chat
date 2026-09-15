@@ -12,7 +12,7 @@ apps/
 packages/
   base-datos/   Esquema, migraciones y adaptador de PostgreSQL
   compartido/   Contratos API, esquemas Zod, tipos y constantes
-  interfaz/     Primitivas visuales reutilizables
+  interfaz/     Composiciones reutilizables basadas en shadcn/ui
   configuracion/ Configuración compartida de herramientas
 docker-compose.yml # Floci AZ para servicios Azure locales
 biome.json         # Formato y lint únicos del monorepo
@@ -35,5 +35,6 @@ docs/
 
 - [Arquitectura del backend](docs/architecture/backend.md)
 - [Arquitectura del frontend](docs/architecture/frontend.md)
+- [Diseño visual del frontend](docs/architecture/frontend/design.md)
 - [Colas, reintentos, DLQ e interruptores de circuito](docs/architecture/colas-y-resiliencia.md)
 - [Convenciones para agentes y contribuyentes](AGENTS.md)

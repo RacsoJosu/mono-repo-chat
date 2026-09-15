@@ -13,10 +13,16 @@
 - Usa la versión de Node indicada en `.node-version` mediante fnm. Antes de instalar o ejecutar dependencias, ejecuta `fnm use` si tu terminal no cambia de versión automáticamente.
 - Biome es el formatter y linter único del repositorio. No agregues Prettier, ESLint ni configuraciones paralelas sin una decisión de arquitectura explícita.
 - Ejecuta `pnpm formatear` después de cambios de código y `pnpm verificar` antes de entregar cambios.
+- Los colores y componentes visuales deben respetar `docs/architecture/frontend/design.md`. Usa tokens semánticos; no escribas valores de color directos dentro de componentes.
+- El panel usa Tailwind CSS v4 para estilos responsive y shadcn/ui para primitivas visuales. No crees componentes base ni media queries manuales cuando Tailwind o shadcn ya cubran la necesidad.
 - Todos los nombres propios del proyecto (carpetas, archivos, variables, funciones, tipos, clases, errores y eventos) deben estar en español y describir su intención. Ejemplos: `conversaciones.service.ts`, `crearServicioConversaciones`, `mensajeEntrante`, `ErrorConversacionNoEncontrada`.
 - `worker` es una excepción técnica aprobada para el proceso asíncrono y su aplicación (`apps/worker`). Sus módulos internos siguen usando nombres descriptivos en español.
+- En el panel son excepciones aprobadas las carpetas `routes`, `features`, `components`, `hooks`, `store`, `services` y `utils` según la arquitectura del frontend, los sufijos `.query.ts` y `.mutation.ts` y el archivo generado `routeTree.gen.ts`. Las funcionalidades y los archivos propios mantienen nombres descriptivos en español.
 - Conserva únicamente los nombres exigidos por una dependencia o estándar externo (`package.json`, `src`, `useQuery`, `errorComponent`, APIs de Meta). No traduzcas identificadores de terceros.
 - Evita abreviaturas ambiguas y nombres genéricos como `data`, `item`, `handler`, `utils` o `manager`; nombra qué representa o hace cada elemento.
+- Declara las constantes reutilizables en archivos dedicados dentro de `constantes/`; no las mezcles con componentes, servicios o rutas salvo que sean estrictamente locales y de una sola línea.
+- Declara tipos e interfaces reutilizables en archivos dedicados dentro de `tipos/`. Un archivo de implementación solo conserva los tipos locales que no se comparten y cuya extracción no mejora la lectura.
+- Un componente no puede superar 300 líneas. Cuando se acerque al límite, sepáralo por composición en componentes con una responsabilidad concreta, manteniendo el componente padre como orquestador visual.
 - Organiza el código por funcionalidad de negocio, no por tipo técnico global. El árbol debe comunicar que este es un sistema de conversaciones, agentes y WhatsApp.
 - Mantén dependencias dirigidas hacia el dominio: interfaces y reglas de aplicación no importan Fastify, Drizzle, Redis, React ni SDKs de Meta.
 - Usa inyección de dependencias por constructor o por factoría. Las dependencias se componen en el punto de arranque de cada aplicación.
@@ -36,7 +42,7 @@
 
 - Crea una carpeta nueva solo cuando represente una capacidad de negocio, una capa definida en la arquitectura o una integración externa.
 - No crees capas, abstracciones, eventos, colas o repositorios sin un caso de uso real.
-- No dupliques contratos entre apps: comparte esquemas y tipos de transporte en `packages/shared` cuando ambos consumidores los necesiten.
+- No dupliques contratos entre apps: comparte esquemas y tipos de transporte en `packages/compartido` cuando ambos consumidores los necesiten.
 - No compartas lógica de negocio del backend con el frontend. Solo pueden compartirse contratos, validaciones sin I/O, constantes y tipos.
 
 ## Checklist antes de terminar
