@@ -1,0 +1,18 @@
+{
+  "name": "@chatbot-whatsapp/base-datos",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "compilar": "tsc -p tsconfig.json",
+    "verificar": "tsc -p tsconfig.json --noEmit"
+  },
+  "dependencies": {
+    "drizzle-orm": "^0.44.0",
+    "pg": "^8.0.0"
+  },
+  "devDependencies": {
+    "@types/pg": "^8.0.0",
+    "drizzle-kit": "^0.31.0"
+  }
+}

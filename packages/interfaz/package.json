@@ -1,0 +1,16 @@
+{
+  "name": "@chatbot-whatsapp/interfaz",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "peerDependencies": {
+    "react": "^19.0.0"
+  },
+  "scripts": {
+    "compilar": "tsc -p tsconfig.json",
+    "verificar": "tsc -p tsconfig.json --noEmit"
+  }
+}

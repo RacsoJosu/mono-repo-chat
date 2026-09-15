@@ -1,0 +1,8 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "tasks": {
+    "desarrollo": { "cache": false, "persistent": true },
+    "compilar": { "dependsOn": ["^compilar"], "outputs": ["dist/**"] },
+    "verificar": { "dependsOn": ["^verificar"], "outputs": [] }
+  }
+}

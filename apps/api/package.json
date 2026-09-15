@@ -1,0 +1,20 @@
+{
+  "name": "@chatbot-whatsapp/api",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "desarrollo": "tsx watch src/server.ts",
+    "compilar": "tsc -p tsconfig.json",
+    "verificar": "tsc -p tsconfig.json --noEmit"
+  },
+  "dependencies": {
+    "@chatbot-whatsapp/compartido": "workspace:*",
+    "@fastify/cors": "^11.0.0",
+    "fastify": "^5.0.0",
+    "zod": "^3.0.0"
+  },
+  "devDependencies": {
+    "tsx": "^4.0.0"
+  }
+}

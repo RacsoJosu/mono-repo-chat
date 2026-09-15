@@ -1,0 +1,19 @@
+{
+  "name": "@chatbot-whatsapp/worker",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "desarrollo": "tsx watch src/worker.ts",
+    "compilar": "tsc -p tsconfig.json",
+    "verificar": "tsc -p tsconfig.json --noEmit"
+  },
+  "dependencies": {
+    "@azure/service-bus": "^7.9.0",
+    "@chatbot-whatsapp/compartido": "workspace:*",
+    "zod": "^3.0.0"
+  },
+  "devDependencies": {
+    "tsx": "^4.0.0"
+  }
+}
