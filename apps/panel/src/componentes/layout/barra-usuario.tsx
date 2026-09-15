@@ -6,7 +6,7 @@ import { SelectorIdioma } from "./selector-idioma";
 
 export function BarraUsuario() {
   return (
-    <header className="flex h-16 items-center justify-end gap-1 border-b bg-sidebar px-4 text-sidebar-foreground">
+    <header className="sticky top-0 z-30 flex h-16 shrink-0 items-center justify-end gap-1 border-b border-border/60 bg-background/80 px-4 text-foreground backdrop-blur-md md:px-8">
       <BotonCambioTema />
       <SelectorIdioma />
 

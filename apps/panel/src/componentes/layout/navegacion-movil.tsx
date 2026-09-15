@@ -10,7 +10,7 @@ export function NavegacionMovil() {
   return (
     <Tabs
       value={rutaActual}
-      className="fixed inset-x-0 bottom-0 z-40 border-t bg-background px-2 py-2 md:hidden"
+      className="fixed inset-x-0 bottom-0 z-40 border-t border-border/60 bg-background/90 px-2 pb-[max(0.5rem,env(safe-area-inset-bottom))] pt-2 backdrop-blur-md md:hidden"
     >
       <TabsList className="grid h-auto w-full grid-cols-4 bg-transparent">
         {navegacionPanel

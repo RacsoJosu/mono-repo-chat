@@ -14,6 +14,19 @@ El panel incluye tema claro y oscuro. Ambos se construyen con los mismos tokens 
 - No se escriben valores hexadecimales, RGB ni clases de color arbitrarias dentro de componentes de funcionalidades.
 - Cada color debe tener un rol semántico y un token; si no existe un rol, no se agrega un color.
 
+## Dirección de UI/UX de Hilo
+
+Actúa como Lead UI/UX Engineer y Diseñador Frontend Senior especializado en Tailwind CSS y shadcn/ui. Cada pantalla debe tener una estética moderna, refinada y propia de Hilo, evitando la apariencia genérica de plantilla. Aplica obligatoriamente estos criterios, adaptados al trabajo de atención de conversaciones:
+
+1. **Shadcn y Tailwind con intención.** Personaliza las composiciones mediante `className`, reutilizando las primitivas. Prioriza bordes precisos (`border-border/60`) y superficies diferenciadas sobre sombras pesadas. Usa `text-muted-foreground` para jerarquías secundarias; la opacidad nunca debe comprometer el contraste.
+2. **Tipografía y jerarquía.** Combina títulos con `font-semibold tracking-tight`, cifras tabulares y rótulos breves con `text-xs font-medium`. El tamaño y el espacio guían la lectura; evita que todos los bloques compitan por atención.
+3. **Identidad y contraste.** Conserva azul y púrpura, blanco en claro y negro como fondo oscuro. Usa capas `background`, `card`, `muted` y `accent`. Los ejemplos genéricos con zinc, blanco directo, ámbar o esmeralda se traducen a nuestros tokens; no crean una paleta alternativa. Los degradados `bg-linear-to-br from-accent/60 via-card to-secondary/40` se limitan a encabezados o acentos, nunca detrás de texto denso.
+4. **Distribución y espaciado.** Introduce asimetría cuando expresa prioridad, como una métrica principal de doble ancho. Conserva el orden operativo cola → conversación → contexto y el modo enfoque. Usa espacio negativo, bordes suaves y transparencias (`bg-background/80 backdrop-blur-md`) en la navegación; evita adornos que resten espacio a los mensajes.
+5. **Producto completo.** Cada interacción implementada debe tener foco visible y respuesta real. Las búsquedas incluyen estado vacío y acción para limpiar filtros; las rutas usan skeletons durante la carga y los errores ofrecen recuperación. No simules retrasos ni conexiones inexistentes. Las pantallas pendientes lo indican sin mostrar controles falsamente operativos.
+6. **Movimiento y accesibilidad.** Prefiere `transition-colors duration-200`, con `motion-reduce:transition-none` o `motion-reduce:animate-none`. Los controles con solo icono tienen nombre accesible. Revisa escritorio, móvil y ambos temas; la identidad visual nunca sustituye legibilidad o navegación por teclado.
+
+Los skeletons son estados de carga reales del router. Los datos actuales de la bandeja son de demostración: búsqueda y filtro actúan sobre esa lista local; enviar mensajes, asignar y adjuntar requieren la integración correspondiente.
+
 ## Paleta base aprobada
 
 La identidad combina azul, púrpura y blanco en modo claro; el modo oscuro usa negro puro como fondo. El azul identifica acciones y mensajes salientes. El púrpura distingue navegación seleccionada, acentos y automatización. Las superficies neutrales permiten leer conversaciones sin saturar la interfaz.
@@ -90,7 +103,7 @@ La Bandeja ofrece un modo enfoque mediante `Collapsible` de shadcn: contrae su c
 
 No se permite crear un archivo CSS por componente para posicionar o hacer responsive el layout. Las excepciones son estilos globales, tokens del tema y casos que Tailwind no pueda representar; deben documentarse antes de agregarse.
 
-Los dropdowns de Hilo conservan la accesibilidad de shadcn/Radix, pero se personalizan como parte de la marca: contenedor con radio `2xl`, borde visible, sombra elevada y opciones con radio `xl`. No se usa el menú rectangular genérico de la configuración inicial.
+Los dropdowns de Hilo conservan la accesibilidad de shadcn/Radix, pero se personalizan como parte de la marca: contenedor con radio `2xl`, borde visible, sombra sutil y opciones con radio `xl`. No se usa el menú rectangular genérico de la configuración inicial.
 
 ### Tema e internacionalización
 

@@ -38,6 +38,12 @@
 - Evita archivos "utils" genéricos. Toda utilidad debe tener un propósito y un nombre de dominio o técnico preciso.
 - Una funcionalidad nueva debe incluir pruebas proporcionadas al riesgo: dominio y servicios con pruebas unitarias; flujos HTTP críticos con pruebas de integración.
 
+## Dirección visual del frontend
+
+- En tareas de interfaz, actúa como Lead UI/UX Engineer y Diseñador Frontend Senior especializado en Tailwind CSS y shadcn/ui. Diseña pantallas modernas y refinadas con identidad propia de Hilo.
+- Aplica obligatoriamente la [dirección de UI/UX de Hilo](docs/architecture/frontend/design.md#dirección-de-uiux-de-hilo): personalización de shadcn, jerarquía tipográfica, bordes precisos, composición intencional, estados completos y microinteracciones accesibles.
+- Adapta las referencias visuales a la paleta azul/púrpura/blanco/negro y a los tokens semánticos existentes. No copies colores directos ni patrones decorativos que reduzcan la legibilidad de las conversaciones.
+
 ## Cambios de estructura
 
 - Crea una carpeta nueva solo cuando represente una capacidad de negocio, una capa definida en la arquitectura o una integración externa.

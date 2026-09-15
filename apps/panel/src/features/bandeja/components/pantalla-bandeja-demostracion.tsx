@@ -15,33 +15,39 @@ export function PantallaBandejaDemostracion() {
     <section className="mx-auto flex min-h-[calc(100svh-7rem)] w-full max-w-[96rem] flex-col gap-5">
       <Collapsible open={resumenAbierto} onOpenChange={establecerResumenAbierto}>
         <header
-          className={`flex justify-between gap-4 rounded-3xl bg-sidebar text-sidebar-foreground ${resumenAbierto ? "flex-col p-5 sm:flex-row sm:items-end sm:p-7" : "items-center px-5 py-3"}`}
+          className={`flex justify-between gap-4 rounded-3xl border border-border/60 bg-linear-to-br from-accent/60 via-card to-secondary/40 text-foreground ${resumenAbierto ? "flex-col p-5 sm:flex-row sm:items-end sm:p-7" : "items-center px-5 py-3"}`}
         >
           <div>
             {resumenAbierto && (
-              <p className="text-sm font-medium text-sidebar-foreground/70">Centro vivo</p>
+              <p className="text-xs font-medium uppercase tracking-[0.2em] text-accent-foreground">
+                Centro vivo
+              </p>
             )}
             <h1
-              className={`${resumenAbierto ? "mt-1 text-3xl" : "text-lg"} font-semibold tracking-tight`}
+              className={`${resumenAbierto ? "mt-3 text-3xl sm:text-4xl" : "text-lg"} font-semibold tracking-tight`}
             >
               Bandeja de Hilo
             </h1>
             {resumenAbierto && (
-              <p className="mt-2 text-sidebar-foreground/75">
+              <p className="mt-3 max-w-lg text-sm leading-6 text-muted-foreground">
                 Cada conversación conserva su contexto.
               </p>
             )}
           </div>
 
           <div className="flex items-center gap-2">
-            <Badge variant="secondary" className="gap-1.5 px-3 py-1.5 text-sm">
+            <Badge
+              variant="secondary"
+              className="gap-1.5 border border-primary/15 px-3 py-1.5 text-xs"
+            >
               <MessageCircleMore className="size-4" />
               12 por atender
             </Badge>
             <CollapsibleTrigger asChild>
               <Button
                 variant="ghost"
-                className="text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
+                aria-label={resumenAbierto ? "Activar modo enfoque" : "Mostrar resumen"}
+                className="rounded-xl border border-border/60 bg-card/70 text-foreground hover:bg-accent hover:text-accent-foreground"
               >
                 {resumenAbierto ? <ChevronsUp /> : <ChevronsDown />}
                 <span className="hidden sm:inline">
