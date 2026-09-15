@@ -6,7 +6,7 @@
   "scripts": {
     "desarrollo": "tsx watch src/server.ts",
     "compilar": "tsc -p tsconfig.json",
-    "verificar": "tsc -p tsconfig.json --noEmit"
+    "verificar": "tsc -p tsconfig.json --noEmit && tsx --test pruebas/*.test.ts"
   },
   "dependencies": {
     "@chatbot-whatsapp/compartido": "workspace:*",

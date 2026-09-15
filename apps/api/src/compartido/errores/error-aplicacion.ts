@@ -1,9 +1,10 @@
+import type { CategoriaErrorAplicacion, DetalleValidacion } from "./tipos/error-aplicacion.js";
 export class ErrorAplicacion extends Error {
   constructor(
     readonly codigo: string,
     readonly mensajeSeguro: string,
-    readonly estadoHttp: number,
-    readonly detalles: unknown[] = [],
+    readonly categoria: CategoriaErrorAplicacion,
+    readonly detalles: DetalleValidacion[] = [],
     opciones?: ErrorOptions,
   ) {
     super(mensajeSeguro, opciones);

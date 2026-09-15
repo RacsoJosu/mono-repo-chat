@@ -18,7 +18,7 @@ src/
       conversaciones.service.ts
       conversaciones.repository.ts
       conversaciones.schemas.ts
-      conversaciones.types.ts
+      tipos/conversaciones.ts
       conversaciones.errors.ts
     mensajes/
     contactos/
@@ -47,7 +47,7 @@ Cada módulo empieza con los archivos que necesita. No se crean carpetas o abstr
 | `*.repository.ts` | Leer y persistir datos con Drizzle; mapear almacenamiento a resultados que entiende el servicio. | Devolver HTTP, usar `request`/`reply`, decidir reglas de negocio o coordinar otros repositorios. |
 | `cliente-*.ts` | Adaptar una API externa, como Meta, Azure o Redis, a una interfaz pequeña que necesita el módulo. | Tomar decisiones de conversación o construir respuestas HTTP. |
 | `*.schemas.ts` | Declarar y validar esquemas de frontera con Zod. | Ejecutar I/O, consultar datos o implementar reglas de negocio. |
-| `*.types.ts` | Tipos, DTOs internos y contratos locales del módulo. | Ejecutar I/O o importar infraestructura. |
+| `tipos/*.ts` | Tipos, DTOs internos y contratos locales del módulo. | Ejecutar I/O o importar infraestructura. |
 | `*.errors.ts` | Errores tipados del módulo y sus códigos estables. | Conocer HTTP o serializar respuestas. |
 
 Un controlador siempre devuelve HTTP. Un servicio, repositorio o cliente **nunca** devuelve HTTP.
@@ -160,3 +160,6 @@ Los webhooks de Meta responden rápido: validan, deduplican por identificador de
 - Introducir una abstracción de unidad de trabajo únicamente cuando una operación requiera atomicidad entre varios repositorios.
 - Los mensajes entrantes son idempotentes: persistir el identificador externo de Meta con una restricción única antes de procesar el flujo.
 - Publicar eventos después de confirmar la transacción; tareas reintentables deben ser idempotentes.
+
+
+Las categorías de `ErrorAplicacion` son `validacion`, `no_autenticado`, `no_autorizado`, `no_encontrado`, `conflicto` e `interno`. El adaptador HTTP las traduce a estados mediante sus constantes. Los detalles de validación contienen únicamente `campo`, `regla` y `mensaje` seguro; nunca se devuelve `ZodError.issues` directamente.
