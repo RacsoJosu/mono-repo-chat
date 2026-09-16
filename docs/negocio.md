@@ -13,7 +13,7 @@ Una decisión acordada no significa que ya esté implementada. Las propuestas y 
 - Los contactos, canales y conversaciones deben respetar el aislamiento entre empresas.
 - No habrá restricciones de visibilidad por equipo ni por agente asignado en esta primera versión.
 - La asignación futura de un responsable es distinta del permiso para consultar el chat; asignarlo no debe implicar automáticamente ocultarlo a sus compañeros.
-- La pertenencia de una misma persona a varias empresas y la selección de empresa activa necesitan concretarse con el modelo de autenticación; no se asume una regla adicional.
+- Una misma persona puede pertenecer a varias empresas con un rol diferente por membresía. Cambiar la empresa activa exige validar la membresía y separar o limpiar la caché del panel.
 
 ## 2. Identidad del chat — acordado
 
@@ -61,7 +61,7 @@ Una decisión acordada no significa que ya esté implementada. Las propuestas y 
 
 La primera entrega se probará con datos locales persistidos. No incluye recepción o envío mediante Meta, procesadores de integración, indicadores de escritura, presencia ni prevención de respuestas simultáneas duplicadas. Estos últimos se diseñarán cuando se implemente el envío.
 
-El DBML debe contemplar organizaciones, usuarios y membresías, canales de WhatsApp, contactos, chats, mensajes y lectura por agente. Esta lista describe conceptos: los nombres físicos, las tablas de Better Auth y las claves definitivas todavía no están cerrados.
+El DBML debe contemplar organizaciones, usuarios y membresías, canales de WhatsApp, contactos, chats, mensajes y lectura por agente. Las tablas de identidad de Better Auth ya se describen en el DBML de identidad. El modelo físico de canales, contactos, chats, mensajes y lectura sigue pendiente.
 
 ## 7. Base técnica ya acordada
 
@@ -80,7 +80,7 @@ El DBML debe contemplar organizaciones, usuarios y membresías, canales de Whats
 - Índices B-tree para orden y acceso; evaluar `pg_trgm` para búsqueda parcial, incluyendo el coste de términos cortos.
 - Normalización de teléfono, mayúsculas y acentos; tamaño del resumen del último mensaje.
 - Contratos HTTP definitivos, política de actualización de bandeja y validación de entradas.
-- Modelo físico de Better Auth, creación inicial de credenciales y recuperación de acceso.
+- Implementación del bootstrap y recuperación administrativa según la estrategia de autenticación aprobada.
 - Regla de lectura y actualizaciones concurrentes, integridad entre empresas y actualización consistente del último mensaje.
 
 Estas propuestas no autorizan a inventar reglas de negocio ni se consideran un diseño final de base de datos.
@@ -112,3 +112,26 @@ Los tamaños de datos de prueba, presupuestos de rendimiento y criterios concret
 ## Mantenimiento de esta memoria
 
 Actualizar este documento cuando se acuerde o cambie una regla de negocio. Registrar aquí la decisión y su alcance, reflejar sus consecuencias técnicas en arquitectura y conservar explícitos los asuntos pendientes. Las instrucciones nuevas del usuario tienen prioridad sobre decisiones anteriores.
+
+## Autenticación aprobada para implementación
+
+Se incorporan sesiones Better Auth en PostgreSQL sin caché positiva de sesión, correo y contraseña, cambio obligatorio de contraseña inicial y TOTP obligatorio para todos, con recuperación mediante códigos de un solo uso. Las integraciones usan OAuth client_credentials, tokens opacos de cinco minutos, permisos explícitos y una sola empresa. No hay registro público ni delegación de identidades humanas a integraciones.
+
+Las personas pueden pertenecer a varias empresas; los roles fijos propietario, administrador y agente pertenecen a la membresía. Administradores gestionan agentes e integraciones, nunca propietarios. Solo propietarios gestionan propietarios y se protege al último propietario mediante serialización transaccional.
+
+El bootstrap es explícito e idempotente, sin contraseñas predeterminadas, sin ascensos al arrancar y sin restablecer credenciales existentes. Los cambios sensibles requieren contraseña y segundo factor recientes. El contexto de empresa se verifica en cada solicitud, la caché del panel se limpia al cambiar de identidad/empresa y RLS refuerza la separación.
+
+Se rechazan identidades simultáneas de cookie y Bearer. CSRF y orígenes permitidos se verifican en operaciones con cookies. El alta, revocación y cambios de permisos se auditan sin secretos. Los tokens se verifican sin caché positiva y no se emiten refresh tokens para integraciones. La recuperación sin factores requiere un procedimiento administrativo auditado; no habrá un bypass público.
+
+El modelo de identidad se define en DBML antes de generar las migraciones Drizzle versionadas en el repositorio. No se ejecutan migraciones automáticas al iniciar la API.
+
+
+### Estado de las migraciones de identidad
+
+El [DBML de identidad](architecture/identidad.dbml) y el [procedimiento de migraciones](architecture/migraciones.md) fijan el modelo físico inicial de Better Auth 1.7.5. Incluyen membresía única por persona y empresa. Las migraciones no habilitan aún autenticación, permisos, bootstrap ni RLS; esas garantías deben implementarse y probarse antes de exponer datos de negocio.
+
+
+
+### Avance de acceso de personas
+
+Se implementaron sesiones Better Auth con PostgreSQL, cambio de clave inicial, TOTP, códigos de recuperación de un uso, CSRF y bootstrap idempotente. Continúan pendientes autorización por membresía, RLS, auditoría persistida, OAuth externo y conexión del panel. El detalle y los comandos están en arquitectura backend. No se considera completado el plan de autenticación.

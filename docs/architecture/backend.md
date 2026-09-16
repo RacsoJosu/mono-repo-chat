@@ -177,3 +177,26 @@ El contrato público `idChat` utiliza UUID v7 y el esquema Zod 4 compartido en `
 - `tsconfig.pruebas.json` verifica las pruebas y la configuración sin emitir. El tsconfig productivo excluye `src/**/pruebas/**` para no distribuirlas en `dist`.
 - Los servicios se prueban mediante dependencias inyectadas. No se agregan módulos, endpoints o integraciones de producción para montar escenarios de prueba.
 - Toda nueva funcionalidad o corrección sigue TDD: fallo observable primero, implementación mínima después y refactorización con pruebas verdes. Las migraciones de ejecutor preservan las suites existentes. No se exige un porcentaje artificial de cobertura.
+
+## Migraciones versionadas
+
+El DBML de identidad está en [identidad.dbml](identidad.dbml). Drizzle es el único ejecutor de migraciones; el esquema TypeScript y el historial SQL se versionan en `packages/base-datos`. Consulta el [flujo de migraciones](migraciones.md) para generar, revisar, aplicar y probar cambios. La API no ejecuta migraciones al arrancar.
+
+
+## Autenticación de personas: estado implementado
+
+- El esquema del CLI y el servidor comparten `modulos/acceso/configuracion/identidad.ts`. El archivo generado sigue procediendo exclusivamente del CLI oficial.
+- `server.ts` compone Pool, Drizzle y Better Auth. Las sesiones se consultan en PostgreSQL; la caché de cookies permanece desactivada.
+- `/api/auth/*` expone únicamente ingreso, cierre de sesión, consulta de sesión, cambio de contraseña, inscripción TOTP y verificación TOTP/código de recuperación. Registro, recuperación de contraseña, sustitución de un factor inscrito y administración pública están cerrados.
+- Las mutaciones de autenticación exigen el origen configurado. Se rechazan cookie de identidad y Authorization simultáneos. Los tokens de sesión se eliminan del JSON y las cookies se conservan HttpOnly, SameSite=Lax y Secure en producción.
+- `GET /api/acceso/estado` informa si falta cambiar clave, confirmar segundo factor o si la sesión está lista. Las rutas de negocio bajo `/api/` exigen cambio de clave y un segundo factor confirmado para esa sesión.
+- `GET /api/acceso/empresas` lista las organizaciones de la persona autenticada mediante el plugin oficial. Esto no habilita gestión de roles ni selección de empresa.
+- Los errores del proveedor se convierten al contrato JSON seguro de la API. Sus mensajes internos y tokens no se propagan.
+- `pnpm --filter @chatbot-whatsapp/api bootstrap` crea empresa y primer propietario mediante una transacción. Usa las variables BOOTSTRAP_* de `.env.example`, no lee contraseñas de argumentos ni las imprime. Repetir la misma operación conserva credenciales y privilegios; los conflictos no elevan usuarios existentes.
+- Las variables se suministran al proceso; estos comandos no cargan automáticamente el `.env` de la raíz. Configurar URL_BASE_DE_DATOS, URL_PUBLICA y SECRETO_AUTENTICACION antes de iniciar la API.
+
+### Validación y límites
+
+Las pruebas PostgreSQL cubren cambio de clave, TOTP, recuperación de un solo uso, expiración, revocación, CSRF y bootstrap idempotente. Para ejecutarlas, usar una base local exclusiva con las migraciones actuales y URL_BASE_DE_DATOS_PRUEBAS.
+
+La entrega completa de autenticación sigue pendiente: interfaz de acceso, selección y aislamiento de caché por empresa, permisos por membresía, cambios de propietarios con reautenticación, auditoría persistida, RLS y acceso OAuth de integraciones. Los endpoints OAuth permanecen cerrados hasta implementar sus verificaciones. No considerar la autenticación completa ni desplegar acceso empresarial como terminado.

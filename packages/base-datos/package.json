@@ -5,14 +5,23 @@
   "type": "module",
   "scripts": {
     "compilar": "tsc -p tsconfig.json",
-    "verificar": "tsc -p tsconfig.json --noEmit"
+    "verificar": "tsc -p tsconfig.json --noEmit",
+    "migraciones:generar": "drizzle-kit generate",
+    "migraciones:aplicar": "drizzle-kit migrate",
+    "migraciones:comprobar": "drizzle-kit check"
   },
   "dependencies": {
-    "drizzle-orm": "^0.44.0",
+    "drizzle-orm": "^0.45.2",
     "pg": "^8.0.0"
   },
   "devDependencies": {
     "@types/pg": "^8.0.0",
     "drizzle-kit": "^0.31.0"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/src/esquema/index.d.ts",
+      "default": "./dist/src/esquema/index.js"
+    }
   }
 }

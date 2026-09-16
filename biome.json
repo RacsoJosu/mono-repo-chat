@@ -7,7 +7,13 @@
   },
   "files": {
     "ignoreUnknown": true,
-    "includes": ["**", "!!**/dist", "!!**/.turbo", "!!**/routeTree.gen.ts"]
+    "includes": [
+      "**",
+      "!!**/dist",
+      "!!**/.turbo",
+      "!!**/routeTree.gen.ts",
+      "!!packages/base-datos/src/esquema/identidad.ts"
+    ]
   },
   "formatter": {
     "enabled": true,

@@ -3,7 +3,15 @@
   "tasks": {
     "desarrollo": {
       "cache": false,
-      "persistent": true
+      "persistent": true,
+      "dependsOn": ["^compilar"],
+      "passThroughEnv": [
+        "ENTORNO",
+        "PUERTO_API",
+        "URL_BASE_DE_DATOS",
+        "URL_PUBLICA",
+        "SECRETO_AUTENTICACION"
+      ]
     },
     "compilar": {
       "dependsOn": ["^compilar"],
@@ -16,6 +24,18 @@
     "probar": {
       "dependsOn": ["^compilar"],
       "outputs": []
+    },
+    "@chatbot-whatsapp/api#verificar": {
+      "dependsOn": ["^verificar", "^compilar"],
+      "outputs": [],
+      "cache": false,
+      "passThroughEnv": ["URL_BASE_DE_DATOS_PRUEBAS"]
+    },
+    "@chatbot-whatsapp/api#probar": {
+      "dependsOn": ["^compilar"],
+      "outputs": [],
+      "cache": false,
+      "passThroughEnv": ["URL_BASE_DE_DATOS_PRUEBAS"]
     }
   }
 }

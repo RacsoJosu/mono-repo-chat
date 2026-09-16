@@ -78,3 +78,13 @@
 - Aísla y limpia QueryClient, proveedores e instancias de servidor por prueba. Ninguna prueba ni escenario se incluye en artefactos productivos.
 - `pnpm probar` ejecuta Vitest mediante Turbo; `pnpm verificar` comprueba formato, tipos productivos, tipos de pruebas y suites. Ejecuta Playwright cuando se afecten flujos de navegador.
 - El nombre `queryClient` y la factoría `crearQueryClient` son excepciones aprobadas. Crea una instancia por arranque del panel y compártela entre el proveedor de React y el contexto de todas las rutas; cada prueba usa una instancia aislada.
+
+## Memoria de negocio y migraciones
+
+- Lee [docs/negocio.md](docs/negocio.md) antes de cambiar reglas de acceso, empresas o conversaciones.
+- Mantén DBML y esquema Drizzle alineados. Versiona SQL, snapshots y journal en `packages/base-datos/migraciones`.
+- Sigue [el flujo de migraciones](docs/architecture/migraciones.md). No uses `drizzle-kit push` ni migraciones al iniciar la API.
+- Comprueba las migraciones con PostgreSQL local aislado; una suite omitida por falta de conexión no cuenta como integración aprobada.
+
+
+- Genera el esquema de Better Auth únicamente mediante su CLI oficial (`pnpm db:identidad`). No conviertas `getSchema` con scripts propios ni edites el archivo generado. Sus identificadores externos son una excepción a los nombres en español.
