@@ -156,3 +156,18 @@ routes (loaders) → utils (queryOptions)
 ```
 
 Los clientes y servicios se componen en el arranque y se inyectan; no se instancian dentro de componentes, hooks ni servicios. Los datos remotos pertenecen a TanStack Query y el estado local compartido pertenece a `store` solo cuando el estado de React del componente resulte insuficiente.
+
+## Bandeja centrada en la conversación
+
+- `/bandeja` muestra la cola y un estado de selección. `/` redirige a ella.
+- `/bandeja/chat/$id` es hija del layout de bandeja: valida el identificador y carga el contacto; los identificadores desconocidos muestran 404.
+- El layout ocupa el alto disponible hasta el borde inferior. La lista y los mensajes tienen scroll independiente; el encabezado del chat y el compositor permanecen visibles.
+- Las filas de chats llegan al borde de la lista y se separan con divisores. La selección usa un indicador lateral y no tarjetas individuales.
+- En móvil se muestra lista o conversación según la ruta; el chat oculta la navegación inferior y ofrece volver en su encabezado; volver a la lista conserva el layout y sus filtros.
+- Se retiran métricas, encabezado promocional, contador duplicado y modo enfoque: el enfoque es el comportamiento predeterminado. Las métricas corresponden a una futura vista de estadísticas, que no se crea sin un caso de uso.
+- Los detalles usan un Sheet cerrado por defecto. No se muestran tarjetas de asignación o contexto persistentes ni acciones falsas. Cuando exista asignación real, la acción principal aparecerá en el encabezado solo si el estado la requiere. Un resumen de transferencia breve se mostrará cuando exista ese dato, con opción de ampliar.
+- `services/bandeja-demostracion.service.ts` implementa `ServicioBandeja`, compuesto en `main.tsx` e inyectado mediante el contexto del router.
+- `utils/bandeja.query-options.ts` define `infiniteQueryOptions`; `hooks/bandeja.query.ts` usa `useInfiniteQuery`. La caché se separa por ID de chat.
+- La primera página contiene los mensajes más recientes, ordenados cronológicamente; `cursorAnterior` solicita una página más antigua. `null` termina la paginación. Las páginas antiguas se anteponen conservando la posición visual del historial.
+- El servicio recibe `AbortSignal`. El adaptador HTTP futuro deberá validar respuestas, mantener IDs estables y mapear su cursor opaco a este contrato. No se inventa un endpoint mientras no exista backend.
+- La demostración ofrece 75 mensajes por chat en páginas de 20 para verificar scroll, fin del historial y aislamiento. No se simulan envíos ni asignaciones. No se crea un store ni una mutation sin operaciones reales.

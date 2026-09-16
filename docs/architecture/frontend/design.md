@@ -21,7 +21,7 @@ Actúa como Lead UI/UX Engineer y Diseñador Frontend Senior especializado en Ta
 1. **Shadcn y Tailwind con intención.** Personaliza las composiciones mediante `className`, reutilizando las primitivas. Prioriza bordes precisos (`border-border/60`) y superficies diferenciadas sobre sombras pesadas. Usa `text-muted-foreground` para jerarquías secundarias; la opacidad nunca debe comprometer el contraste.
 2. **Tipografía y jerarquía.** Combina títulos con `font-semibold tracking-tight`, cifras tabulares y rótulos breves con `text-xs font-medium`. El tamaño y el espacio guían la lectura; evita que todos los bloques compitan por atención.
 3. **Identidad y contraste.** Conserva azul y púrpura, blanco en claro y negro como fondo oscuro. Usa capas `background`, `card`, `muted` y `accent`. Los ejemplos genéricos con zinc, blanco directo, ámbar o esmeralda se traducen a nuestros tokens; no crean una paleta alternativa. Los degradados `bg-linear-to-br from-accent/60 via-card to-secondary/40` se limitan a encabezados o acentos, nunca detrás de texto denso.
-4. **Distribución y espaciado.** Introduce asimetría cuando expresa prioridad, como una métrica principal de doble ancho. Conserva el orden operativo cola → conversación → contexto y el modo enfoque. Usa espacio negativo, bordes suaves y transparencias (`bg-background/80 backdrop-blur-md`) en la navegación; evita adornos que resten espacio a los mensajes.
+4. **Distribución y espaciado.** Introduce asimetría cuando expresa prioridad, como dar mayor ancho a la conversación activa. Conserva el orden operativo cola → conversación → detalles bajo demanda; el enfoque es el estado inicial. Usa espacio negativo, bordes suaves y transparencias (`bg-background/80 backdrop-blur-md`) en la navegación; evita adornos que resten espacio a los mensajes.
 5. **Producto completo.** Cada interacción implementada debe tener foco visible y respuesta real. Las búsquedas incluyen estado vacío y acción para limpiar filtros; las rutas usan skeletons durante la carga y los errores ofrecen recuperación. No simules retrasos ni conexiones inexistentes. Las pantallas pendientes lo indican sin mostrar controles falsamente operativos.
 6. **Movimiento y accesibilidad.** Prefiere `transition-colors duration-200`, con `motion-reduce:transition-none` o `motion-reduce:animate-none`. Los controles con solo icono tienen nombre accesible. Revisa escritorio, móvil y ambos temas; la identidad visual nunca sustituye legibilidad o navegación por teclado.
 
@@ -97,9 +97,20 @@ El marco del panel reutiliza componentes shadcn de esta forma:
 
 La misma lista de opciones de navegación alimenta el `SidebarMenu` en escritorio y los `Tabs` en móvil. `Sidebar` y `SidebarInset` son hermanos: dentro de `SidebarInset`, la barra horizontal del usuario aparece antes de `main` y de `Outlet`. Alinea sus controles a la derecha en este orden: cambio de tema, selector de idioma, información visible del usuario y menú de acciones. Por tanto, pertenece al layout y no a una vista ni al sidebar. Tailwind decide visibilidad: el sidebar usa `hidden md:flex`; la navegación inferior usa `fixed inset-x-0 bottom-0 md:hidden`; el contenido usa `pb-20 md:pb-0`.
 
-La Bandeja mantiene su encabezado independiente. Debajo, la cola, el panel de mensajes y el contexto son hermanos con `flex-col` en móvil y `xl:flex-row` en escritorio. La lista usa ancho fijo de `20rem`, el contexto `18rem` y la conversación ocupa el espacio flexible central.
+## Bandeja centrada en la conversación
 
-La Bandeja ofrece un modo enfoque mediante `Collapsible` de shadcn: contrae su contexto superior y métricas sin ocultar la identidad mínima de la vista. En ese estado, la fila de conversaciones crece hasta el borde inferior disponible y el panel de mensajes ocupa toda esa altura.
+- `/bandeja` muestra la cola y un estado de selección. `/` redirige a ella.
+- `/bandeja/chat/$id` es hija del layout de bandeja: valida el identificador y carga el contacto; los identificadores desconocidos muestran 404.
+- El layout ocupa el alto disponible hasta el borde inferior. La lista y los mensajes tienen scroll independiente; el encabezado del chat y el compositor permanecen visibles.
+- Las filas de chats llegan al borde de la lista y se separan con divisores. La selección usa un indicador lateral y no tarjetas individuales.
+- En móvil se muestra lista o conversación según la ruta; el chat oculta la navegación inferior y ofrece volver en su encabezado; volver a la lista conserva el layout y sus filtros.
+- Se retiran métricas, encabezado promocional, contador duplicado y modo enfoque: el enfoque es el comportamiento predeterminado. Las métricas corresponden a una futura vista de estadísticas, que no se crea sin un caso de uso.
+- Los detalles usan un Sheet cerrado por defecto. No se muestran tarjetas de asignación o contexto persistentes ni acciones falsas. Cuando exista asignación real, la acción principal aparecerá en el encabezado solo si el estado la requiere. Un resumen de transferencia breve se mostrará cuando exista ese dato, con opción de ampliar.
+- `services/bandeja-demostracion.service.ts` implementa `ServicioBandeja`, compuesto en `main.tsx` e inyectado mediante el contexto del router.
+- `utils/bandeja.query-options.ts` define `infiniteQueryOptions`; `hooks/bandeja.query.ts` usa `useInfiniteQuery`. La caché se separa por ID de chat.
+- La primera página contiene los mensajes más recientes, ordenados cronológicamente; `cursorAnterior` solicita una página más antigua. `null` termina la paginación. Las páginas antiguas se anteponen conservando la posición visual del historial.
+- El servicio recibe `AbortSignal`. El adaptador HTTP futuro deberá validar respuestas, mantener IDs estables y mapear su cursor opaco a este contrato. No se inventa un endpoint mientras no exista backend.
+- La demostración ofrece 75 mensajes por chat en páginas de 20 para verificar scroll, fin del historial y aislamiento. No se simulan envíos ni asignaciones. No se crea un store ni una mutation sin operaciones reales.
 
 No se permite crear un archivo CSS por componente para posicionar o hacer responsive el layout. Las excepciones son estilos globales, tokens del tema y casos que Tailwind no pueda representar; deben documentarse antes de agregarse.
 

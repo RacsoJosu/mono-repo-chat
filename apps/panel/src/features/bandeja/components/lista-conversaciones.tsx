@@ -1,3 +1,4 @@
+import { Link, useRouterState } from "@tanstack/react-router";
 import { Search, SearchX, SlidersHorizontal } from "lucide-react";
 import { useState } from "react";
 import { Avatar, AvatarFallback } from "@/componentes/ui/avatar";
@@ -17,34 +18,42 @@ function FilaConversacion({
 }) {
   return (
     <Button
+      asChild
       variant="ghost"
-      className={`h-auto w-full items-start justify-start gap-3 rounded-2xl border px-3 py-4 text-left transition-colors duration-200 motion-reduce:transition-none hover:bg-accent ${seleccionada ? "border-primary/40 bg-secondary hover:bg-secondary" : "border-transparent"}`}
+      className={`h-auto w-full items-start justify-start gap-3 rounded-none border-b border-l-2 border-border/60 px-4 py-4 text-left transition-colors duration-200 motion-reduce:transition-none hover:bg-accent ${seleccionada ? "border-l-primary bg-secondary hover:bg-secondary" : "border-l-transparent"}`}
     >
-      <Avatar className="size-10 shrink-0">
-        <AvatarFallback>{conversacion.iniciales}</AvatarFallback>
-      </Avatar>
-      <span className="min-w-0 flex-1">
-        <span className="flex items-center justify-between gap-2">
-          <span className="truncate text-sm font-semibold">{conversacion.nombre}</span>
-          <span className="font-mono text-[11px] text-muted-foreground">{conversacion.hora}</span>
+      <Link
+        to="/bandeja/chat/$id"
+        params={{ id: conversacion.id }}
+        aria-current={seleccionada ? "page" : undefined}
+      >
+        <Avatar className="size-10 shrink-0">
+          <AvatarFallback>{conversacion.iniciales}</AvatarFallback>
+        </Avatar>
+        <span className="min-w-0 flex-1">
+          <span className="flex items-center justify-between gap-2">
+            <span className="truncate text-sm font-semibold">{conversacion.nombre}</span>
+            <span className="font-mono text-[11px] text-muted-foreground">{conversacion.hora}</span>
+          </span>
+          <span className="mt-1 block truncate text-sm font-normal text-muted-foreground">
+            {conversacion.resumen}
+          </span>
+          <span className="mt-2 flex items-center justify-between gap-2">
+            <InsigniaEstado estado={conversacion.estado} />
+            {conversacion.mensajesSinLeer > 0 && (
+              <Badge className="min-w-5 justify-center rounded-full px-1.5">
+                {conversacion.mensajesSinLeer}
+              </Badge>
+            )}
+          </span>
         </span>
-        <span className="mt-1 block truncate text-sm font-normal text-muted-foreground">
-          {conversacion.resumen}
-        </span>
-        <span className="mt-2 flex items-center justify-between gap-2">
-          <InsigniaEstado estado={conversacion.estado} />
-          {conversacion.mensajesSinLeer > 0 && (
-            <Badge className="min-w-5 justify-center rounded-full px-1.5">
-              {conversacion.mensajesSinLeer}
-            </Badge>
-          )}
-        </span>
-      </span>
+      </Link>
     </Button>
   );
 }
 
 export function ListaConversaciones() {
+  const rutaActual = useRouterState({ select: (estado) => estado.location.pathname });
   const [busqueda, establecerBusqueda] = useState("");
   const [soloPendientes, establecerSoloPendientes] = useState(false);
   const consulta = busqueda.trim().toLocaleLowerCase("es");
@@ -54,14 +63,11 @@ export function ListaConversaciones() {
       `${conversacion.nombre} ${conversacion.resumen}`.toLocaleLowerCase("es").includes(consulta),
   );
   return (
-    <section className="rounded-3xl border border-border/60 bg-card p-3">
-      <header className="p-2">
+    <section className="flex h-full min-h-0 w-full flex-col bg-card">
+      <header className="shrink-0 border-b border-border/60 p-4">
         <div className="flex items-center justify-between gap-3">
           <div>
-            <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted-foreground">
-              Cola activa
-            </p>
-            <h2 className="mt-1 text-lg font-semibold">Conversaciones</h2>
+            <h2 className="text-lg font-semibold tracking-tight">Bandeja</h2>
           </div>
           <Button
             variant="ghost"
@@ -88,7 +94,7 @@ export function ListaConversaciones() {
         </div>
       </header>
 
-      <div className="mt-2 space-y-1">
+      <div className="min-h-0 flex-1 divide-y divide-border/60 overflow-y-auto overscroll-contain">
         <p role="status" className="px-2 py-2 text-xs text-muted-foreground">
           {conversacionesVisibles.length} conversaciones{soloPendientes ? " pendientes" : ""}
         </p>
@@ -115,7 +121,7 @@ export function ListaConversaciones() {
           <FilaConversacion
             key={conversacion.id}
             conversacion={conversacion}
-            seleccionada={conversacion.id === conversacionesDemostracion[0]?.id}
+            seleccionada={rutaActual === `/bandeja/chat/${conversacion.id}`}
           />
         ))}
       </div>

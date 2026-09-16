@@ -6,12 +6,14 @@ import { Toaster } from "sonner";
 import { TooltipProvider } from "@/componentes/ui/tooltip";
 import "./internacionalizacion/configuracion.js";
 import { crearEnrutador } from "./enrutador.js";
+import { crearServicioBandejaDemostracion } from "./features/bandeja/services/bandeja-demostracion.service";
 import { crearClienteConsultas } from "./lib/cliente-consultas.js";
 import { ProveedorTema } from "./proveedores/proveedor-tema.js";
 import "./styles.css";
 
 const clienteConsultas = crearClienteConsultas();
-const enrutador = crearEnrutador(clienteConsultas);
+const servicioBandeja = crearServicioBandejaDemostracion();
+const enrutador = crearEnrutador(clienteConsultas, servicioBandeja);
 
 const elementoRaiz = document.getElementById("raiz");
 if (!elementoRaiz) throw new Error("No se encontró el elemento raíz del panel.");

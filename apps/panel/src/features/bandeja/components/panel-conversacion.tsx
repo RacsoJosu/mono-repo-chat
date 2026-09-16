@@ -1,67 +1,86 @@
-import { Bot, MoreHorizontal, Paperclip, SendHorizontal } from "lucide-react";
+import { Link } from "@tanstack/react-router";
+import { ArrowLeft, Info, SendHorizontal } from "lucide-react";
 import { Avatar, AvatarFallback } from "@/componentes/ui/avatar";
 import { Button } from "@/componentes/ui/button";
 import { Input } from "@/componentes/ui/input";
-import { conversacionesDemostracion } from "../constantes/conversaciones-demostracion";
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/componentes/ui/sheet";
+import type { ServicioBandeja } from "../tipos/servicio-bandeja";
+import type { ConversacionDemostracion } from "../tipos/tipos-conversacion-demostracion";
 import { InsigniaEstado } from "./insignia-estado";
+import { MensajesChat } from "./mensajes-chat";
 
 export function PanelConversacion({
-  ocuparAlturaDisponible = false,
+  conversacion,
+  servicio,
 }: {
-  ocuparAlturaDisponible?: boolean;
+  conversacion: ConversacionDemostracion;
+  servicio: ServicioBandeja;
 }) {
-  const conversacion = conversacionesDemostracion[0];
-
   return (
     <section
-      className={`flex flex-col overflow-hidden rounded-3xl border border-border/70 bg-card ${ocuparAlturaDisponible ? "h-full min-h-0" : "min-h-[38rem]"}`}
+      aria-label={`Chat con ${conversacion.nombre}`}
+      className="flex h-full min-h-0 min-w-0 flex-1 flex-col bg-card"
     >
-      <header className="flex flex-wrap items-center gap-3 border-b border-border/60 px-5 py-4">
-        <Avatar className="size-10">
+      <header className="flex shrink-0 items-center gap-3 border-b border-border/60 px-4 py-3">
+        <Button asChild variant="ghost" size="icon" className="md:hidden">
+          <Link to="/bandeja" aria-label="Volver a los chats">
+            <ArrowLeft />
+          </Link>
+        </Button>
+        <Avatar className="size-9 shrink-0">
           <AvatarFallback>{conversacion.iniciales}</AvatarFallback>
         </Avatar>
         <div className="min-w-0 flex-1">
-          <h2 className="truncate font-semibold">{conversacion.nombre}</h2>
-          <p className="text-sm text-muted-foreground">+504 9876-4321 · Cliente desde 2025</p>
+          <h1 className="truncate text-sm font-semibold">{conversacion.nombre}</h1>
+          <p className="text-xs text-muted-foreground">WhatsApp · Demostración</p>
         </div>
-        <InsigniaEstado estado={conversacion.estado} />
-        <Button variant="ghost" size="icon" aria-label="Más acciones de la conversación">
-          <MoreHorizontal />
-        </Button>
+        <span className="hidden sm:block">
+          <InsigniaEstado estado={conversacion.estado} />
+        </span>
+        <Sheet>
+          <SheetTrigger asChild>
+            <Button variant="ghost" size="icon" aria-label="Detalles del chat">
+              <Info />
+            </Button>
+          </SheetTrigger>
+          <SheetContent>
+            <SheetHeader>
+              <SheetTitle>{conversacion.nombre}</SheetTitle>
+              <SheetDescription>Contexto de la conversación</SheetDescription>
+            </SheetHeader>
+            <div className="space-y-6 px-4">
+              <InsigniaEstado estado={conversacion.estado} />
+              <div>
+                <h2 className="text-sm font-medium">Último mensaje</h2>
+                <p className="mt-2 text-sm leading-6 text-muted-foreground">
+                  {conversacion.resumen}
+                </p>
+              </div>
+              <p className="text-xs text-muted-foreground">
+                Conversación de demostración. La asignación y el envío estarán disponibles al
+                conectar el canal.
+              </p>
+            </div>
+          </SheetContent>
+        </Sheet>
       </header>
-
-      <div className="flex flex-1 flex-col gap-5 bg-linear-to-b from-background/40 to-card p-5 sm:p-6">
-        <p className="mx-auto rounded-full bg-muted px-3 py-1 text-xs text-muted-foreground">
-          Hoy · 10:36
-        </p>
-        <div className="max-w-[82%] rounded-2xl rounded-tl-sm bg-card p-4 text-sm leading-6 ring-1 ring-border/60">
-          Hola Andrea, soy Hilo. ¿En qué puedo ayudarte hoy?
-        </div>
-        <div className="ml-auto max-w-[82%] rounded-2xl rounded-tr-sm bg-secondary p-4 text-sm leading-6 text-secondary-foreground">
-          Quisiera conocer el estado de mi solicitud.
-        </div>
-        <div className="max-w-[82%] rounded-2xl rounded-tl-sm bg-accent p-4 text-sm leading-6 text-accent-foreground">
-          Puedo ayudarte con eso. ¿Quieres que te conecte con un asesor?
-          <span className="mt-2 flex items-center gap-1.5 text-xs font-medium text-accent-foreground">
-            <Bot className="size-3" /> Hilo · Asistente automático
-          </span>
-        </div>
-        <div className="ml-auto max-w-[82%] rounded-2xl rounded-tr-sm bg-secondary p-4 text-sm leading-6 text-secondary-foreground">
-          Sí, por favor.
-        </div>
-      </div>
-
-      <footer className="border-t bg-card p-4">
-        <div className="flex items-center gap-2 rounded-2xl border bg-background px-2 py-1.5 focus-within:ring-2 focus-within:ring-ring">
-          <Button variant="ghost" size="icon" aria-label="Adjuntar archivo">
-            <Paperclip />
-          </Button>
+      <MensajesChat id={conversacion.id} servicio={servicio} />
+      <footer className="shrink-0 border-t border-border/60 bg-card px-4 py-3 sm:px-6">
+        <div className="flex items-center gap-2">
           <Input
-            className="border-0 bg-transparent shadow-none focus-visible:ring-0"
-            aria-label="Escribe una respuesta"
-            placeholder="Escribe una respuesta"
+            disabled
+            aria-label="Escribir respuesta"
+            placeholder="Envío disponible al conectar el canal"
+            className="h-11 rounded-xl"
           />
-          <Button size="icon" aria-label="Enviar respuesta">
+          <Button disabled size="icon" aria-label="Enviar respuesta">
             <SendHorizontal />
           </Button>
         </div>

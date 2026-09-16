@@ -1,4 +1,6 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { PantallaBandejaDemostracion } from "@/features/bandeja/components/pantalla-bandeja-demostracion";
-
-export const Route = createFileRoute("/")({ component: PantallaBandejaDemostracion });
+import { createFileRoute, redirect } from "@tanstack/react-router";
+export const Route = createFileRoute("/")({
+  beforeLoad: () => {
+    throw redirect({ to: "/bandeja" });
+  },
+});

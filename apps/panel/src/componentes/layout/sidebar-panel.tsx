@@ -33,7 +33,7 @@ export function SidebarPanel() {
         <SidebarMenu>
           {navegacionPanel.map((opcion) => {
             const Icono = opcion.icono;
-            const activa = rutaActual === opcion.ruta;
+            const activa = rutaActual === opcion.ruta || rutaActual.startsWith(`${opcion.ruta}/`);
 
             return (
               <SidebarMenuItem key={opcion.clave}>
