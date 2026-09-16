@@ -104,6 +104,37 @@ suite(
       expect(verificacion.statusCode, verificacion.body).toBe(200);
       expect((await enviar("/api/acceso/estado")).json()).toMatchObject({ etapa: "listo" });
       expect((await enviar("/api/acceso/empresas")).json()).toEqual([]);
+      const antesRenovar = await conexiones.query(
+        "UPDATE session SET expires_at=now()+interval '1 hour' WHERE user_id=$1 RETURNING expires_at",
+        [id],
+      );
+      const estadoSeguro = await enviar("/api/acceso/estado");
+      expect(estadoSeguro.json()).toMatchObject({
+        venceEn: expect.any(String),
+        horaServidor: expect.any(String),
+        segundoFactorConfigurado: true,
+      });
+      expect(estadoSeguro.json()).not.toHaveProperty("token");
+      const despuesConsultar = await conexiones.query(
+        "SELECT expires_at FROM session WHERE user_id=$1",
+        [id],
+      );
+      expect(despuesConsultar.rows[0].expires_at).toEqual(antesRenovar.rows[0].expires_at);
+      const renovacion = await enviar("/api/auth/get-session");
+      expect(renovacion.statusCode).toBe(200);
+      expect(
+        renovacion.cookies.some(
+          (cookie) => cookie.name.endsWith("session_token") && cookie.httpOnly,
+        ),
+      ).toBe(true);
+      const despuesRenovar = await conexiones.query(
+        "SELECT expires_at FROM session WHERE user_id=$1",
+        [id],
+      );
+      expect(despuesRenovar.rows[0].expires_at.getTime()).toBeGreaterThan(
+        antesRenovar.rows[0].expires_at.getTime(),
+      );
+      expect(renovacion.json()).not.toHaveProperty("session.token");
       const reemplazo = await enviar("/api/auth/two-factor/enable", { password: claveNueva });
       expect(reemplazo.statusCode).toBe(403);
       await conexiones.query("DELETE FROM session WHERE user_id = $1", [id]);

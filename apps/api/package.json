@@ -10,7 +10,9 @@
     "probar": "vitest run",
     "probar:observar": "vitest",
     "identidad:generar": "auth generate --config ./auth.config.ts --adapter drizzle --dialect postgresql --output ../../packages/base-datos/src/esquema/identidad.ts --yes",
-    "bootstrap": "pnpm --filter @chatbot-whatsapp/base-datos compilar && tsx src/composicion/bootstrap.ts"
+    "bootstrap": "pnpm --filter @chatbot-whatsapp/base-datos compilar && tsx src/composicion/bootstrap.ts",
+    "seed:inbox": "pnpm --filter @chatbot-whatsapp/base-datos compilar && tsx src/composicion/sembrar-bandeja.ts",
+    "db:configure-runtime": "tsx src/composicion/configurar-rol-base-datos.ts"
   },
   "dependencies": {
     "@better-auth/oauth-provider": "^1.7.5",
@@ -25,6 +27,7 @@
   },
   "devDependencies": {
     "@better-auth/utils": "^0.4.2",
+    "@faker-js/faker": "^10.6.0",
     "@types/pg": "^8.23.1",
     "auth": "1.7.5",
     "tsx": "^4.0.0",

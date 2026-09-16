@@ -3,6 +3,7 @@ import * as esquema from "@chatbot-whatsapp/base-datos";
 import { drizzle } from "drizzle-orm/node-postgres";
 import { Pool } from "pg";
 import { crearAplicacion } from "../../../app.js";
+import { componerBandeja } from "../../../composicion/bandeja.js";
 import { crearAutenticacion } from "../acceso.autenticacion.js";
 
 export async function crearAplicacionPrueba() {
@@ -13,7 +14,11 @@ export async function crearAplicacionPrueba() {
     secreto: randomBytes(48).toString("hex"),
     produccion: false,
   });
-  const aplicacion = await crearAplicacion({ autenticacion, urlPublica: "http://localhost:3000" });
+  const aplicacion = await crearAplicacion({
+    conversaciones: componerBandeja(drizzle(conexiones, { schema: esquema }), "secreto-pruebas"),
+    autenticacion,
+    urlPublica: "http://localhost:3000",
+  });
   aplicacion.addHook("onClose", async () => {
     await conexiones.end();
   });

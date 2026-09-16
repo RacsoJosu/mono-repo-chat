@@ -41,6 +41,9 @@ suite("crea las tablas de identidad, sesiones, empresas, membresías y OAuth", a
       "member",
       "oauth_client",
       "oauth_access_token",
+      "contactos",
+      "canales_whatsapp",
+      "conversaciones",
     ]),
   );
 });

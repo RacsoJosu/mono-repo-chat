@@ -12,7 +12,9 @@
     "db:generar": "pnpm --filter @chatbot-whatsapp/base-datos migraciones:generar",
     "db:migrar": "pnpm --filter @chatbot-whatsapp/base-datos migraciones:aplicar",
     "db:comprobar": "pnpm --filter @chatbot-whatsapp/base-datos migraciones:comprobar",
-    "db:identidad": "pnpm --filter @chatbot-whatsapp/api identidad:generar"
+    "db:identidad": "pnpm --filter @chatbot-whatsapp/api identidad:generar",
+    "seed:inbox": "pnpm --filter @chatbot-whatsapp/api seed:inbox",
+    "db:configure-runtime": "pnpm --filter @chatbot-whatsapp/api db:configure-runtime"
   },
   "devDependencies": {
     "@types/node": "^22.0.0",

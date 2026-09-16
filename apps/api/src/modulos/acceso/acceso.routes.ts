@@ -1,5 +1,5 @@
 import { fromNodeHeaders } from "better-auth/node";
-import type { FastifyInstance } from "fastify";
+import type { FastifyInstance, FastifyRequest } from "fastify";
 import { ErrorAplicacion } from "../../compartido/errores/error-aplicacion.js";
 import { esquemaCambioClave, esquemaOpcionesSegundoFactor } from "./acceso.schemas.js";
 import {
@@ -13,6 +13,7 @@ export async function registrarRutasAcceso(
   aplicacion: FastifyInstance,
   dependencias: DependenciasAcceso,
 ) {
+  const identidades = new WeakMap<FastifyRequest, string>();
   aplicacion.addHook("onRequest", async (solicitud) => {
     if (
       solicitud.headers.authorization &&
@@ -50,7 +51,7 @@ export async function registrarRutasAcceso(
     if (ruta === "/api/auth/two-factor/enable") {
       const sesion = await dependencias.autenticacion.api.getSession({
         headers: fromNodeHeaders(solicitud.headers),
-        query: { disableCookieCache: true },
+        query: { disableCookieCache: true, disableRefresh: true },
       });
       if (sesion?.user.twoFactorEnabled) {
         throw new ErrorAplicacion(
@@ -70,8 +71,9 @@ export async function registrarRutasAcceso(
     ) {
       const sesion = await dependencias.autenticacion.api.getSession({
         headers: fromNodeHeaders(solicitud.headers),
-        query: { disableCookieCache: true },
+        query: { disableCookieCache: true, disableRefresh: true },
       });
+      if (sesion) identidades.set(solicitud, sesion.user.id);
       if (!sesion)
         throw new ErrorAplicacion(
           "SESION_REQUERIDA",
@@ -99,7 +101,7 @@ export async function registrarRutasAcceso(
   aplicacion.get("/api/acceso/estado", async (solicitud) => {
     const sesion = await dependencias.autenticacion.api.getSession({
       headers: fromNodeHeaders(solicitud.headers),
-      query: { disableCookieCache: true },
+      query: { disableCookieCache: true, disableRefresh: true },
     });
     if (!sesion)
       throw new ErrorAplicacion(
@@ -109,6 +111,9 @@ export async function registrarRutasAcceso(
       );
     return {
       usuario: { id: sesion.user.id, nombre: sesion.user.name },
+      venceEn: sesion.session.expiresAt.toISOString(),
+      horaServidor: new Date().toISOString(),
+      segundoFactorConfigurado: sesion.user.twoFactorEnabled === true,
       etapa:
         sesion.user.debeCambiarClave !== false
           ? "cambiar_clave"
@@ -150,4 +155,14 @@ export async function registrarRutasAcceso(
       return respuesta.send(omitirCredencialesSesion(await resultado.json()));
     },
   });
+  return async (solicitud: FastifyRequest) => {
+    const usuario = identidades.get(solicitud);
+    if (!usuario)
+      throw new ErrorAplicacion(
+        "SESION_REQUERIDA",
+        "Inicia sesión para continuar.",
+        "no_autenticado",
+      );
+    return usuario;
+  };
 }

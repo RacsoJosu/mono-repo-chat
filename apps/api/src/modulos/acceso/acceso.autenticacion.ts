@@ -18,7 +18,12 @@ export function crearAutenticacion(dependencias: {
     secret: dependencias.secreto,
     trustedOrigins: [new URL(dependencias.urlPublica).origin],
     emailAndPassword: { enabled: true, disableSignUp: true, minPasswordLength: 12 },
-    session: { ...opcionesIdentidad.session, cookieCache: { enabled: false } },
+    session: {
+      ...opcionesIdentidad.session,
+      expiresIn: 7 * 24 * 60 * 60,
+      updateAge: 24 * 60 * 60,
+      cookieCache: { enabled: false },
+    },
     hooks: {
       after: createAuthMiddleware(async (contexto) => {
         if (contexto.context.returned instanceof APIError) return;
