@@ -1,5 +1,8 @@
-import { conversacionesDemostracion } from "../constantes/conversaciones-demostracion";
-import type { MensajeChat, ServicioBandeja } from "../tipos/servicio-bandeja";
+import { conversacionesDemostracion } from "@/features/bandeja/pruebas/demostracion/constantes/conversaciones-demostracion";
+import type {
+  MensajeChat,
+  ServicioBandeja,
+} from "@/features/bandeja/pruebas/demostracion/tipos/servicio-bandeja";
 
 export function crearServicioBandejaDemostracion(): ServicioBandeja {
   return {

@@ -6,6 +6,7 @@ import { aliasPanel } from "./configuracion/constantes/alias";
 
 export default defineConfig({
   plugins: [tanstackRouter({ target: "react", autoCodeSplitting: true }), react(), tailwindcss()],
+  server: { proxy: { "/api": "http://localhost:3000" } },
   resolve: {
     alias: aliasPanel,
   },

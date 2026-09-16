@@ -230,3 +230,7 @@ Referencias: [rutas y carga diferida de TanStack](https://tanstack.com/router/la
 - `ensureQueryData` reutiliza datos existentes. Al montar el hook, una conversación desactualizada se refresca en segundo plano; las actualizaciones de caché se reflejan en la pantalla. No se usa `useLoaderData` como copia del estado remoto.
 - Ausencia de conversación se representa con `null` en Query, porque no admite `undefined` como resultado exitoso; la ruta la convierte en `notFound()`. Los errores de API se propagan sin `catch` y `ErrorRuta` los presenta mediante `PantallaError`, incluido el 404.
 - La consulta de conversación no reintenta automáticamente: muestra el fallo y permite recuperación explícita. `ErrorRuta` restablece el límite de Query y al reintentar invalida los loaders. Los parámetros inválidos siguen deteniendo la navegación antes de consultar.
+
+## Bandeja HTTP y sesiones (implementación vigente)
+
+La bandeja productiva consume la API con búsqueda y cursores; las referencias anteriores a servicios de demostración describen únicamente escenarios de pruebas. Véase [bandeja](bandeja.md) y [sesión del panel](frontend/sesion.md). Estos documentos definen el contrato vigente, RLS, comandos administrativos, Faker, Zustand y sincronización entre pestañas.

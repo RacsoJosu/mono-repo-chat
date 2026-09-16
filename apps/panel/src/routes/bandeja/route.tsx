@@ -1,10 +1,10 @@
 import { createFileRoute, defaultStringifySearch, redirect } from "@tanstack/react-router";
-import { LayoutBandeja } from "@/features/bandeja/components/layout-bandeja";
-import { validarBusquedaBandeja } from "@/features/bandeja/validaciones/busqueda-bandeja";
+import { LayoutBandejaApi } from "@/features/bandeja/components/layout-bandeja-api";
+import { validarBusquedaConversaciones } from "@/features/bandeja/validaciones/busqueda-conversaciones";
 export const Route = createFileRoute("/bandeja")({
-  validateSearch: validarBusquedaBandeja,
+  validateSearch: validarBusquedaConversaciones,
   beforeLoad: ({ location, search }) => {
-    const busquedaCanonica = defaultStringifySearch(validarBusquedaBandeja(search));
+    const busquedaCanonica = defaultStringifySearch(validarBusquedaConversaciones(search));
     if (location.searchStr !== busquedaCanonica) {
       throw redirect({
         href: location.pathname + busquedaCanonica + (location.hash ? `#${location.hash}` : ""),
@@ -12,5 +12,5 @@ export const Route = createFileRoute("/bandeja")({
       });
     }
   },
-  component: LayoutBandeja,
+  component: LayoutBandejaApi,
 });

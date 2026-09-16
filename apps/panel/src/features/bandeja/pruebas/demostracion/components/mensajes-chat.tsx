@@ -2,9 +2,9 @@ import { Bot } from "lucide-react";
 import { PantallaError } from "@/componentes/errores/pantalla-error";
 import { Button } from "@/componentes/ui/button";
 import { Skeleton } from "@/componentes/ui/skeleton";
-import { useMensajesChat } from "../hooks/bandeja.query";
-import { useScrollMensajes } from "../hooks/usar-scroll-mensajes";
-import type { ServicioBandeja } from "../tipos/servicio-bandeja";
+import { useMensajesChat } from "@/features/bandeja/pruebas/demostracion/hooks/bandeja.query";
+import { useScrollMensajes } from "@/features/bandeja/pruebas/demostracion/hooks/usar-scroll-mensajes";
+import type { ServicioBandeja } from "@/features/bandeja/pruebas/demostracion/tipos/servicio-bandeja";
 
 export function MensajesChat({ id, servicio }: { id: string; servicio: ServicioBandeja }) {
   const consulta = useMensajesChat(servicio, id);

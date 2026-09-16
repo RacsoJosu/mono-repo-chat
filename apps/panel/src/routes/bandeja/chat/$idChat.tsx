@@ -1,19 +1,16 @@
-import { createFileRoute, notFound } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { ErrorRuta } from "@/componentes/errores/error-ruta";
 import { RecursoNoEncontrado } from "@/componentes/errores/recurso-no-encontrado";
-import { PanelConversacion } from "@/features/bandeja/components/panel-conversacion";
-import { useConversacionChat } from "@/features/bandeja/hooks/bandeja.query";
-import { opcionesConversacionChat } from "@/features/bandeja/utils/bandeja.query-options";
+import { DetalleConversacion } from "@/features/bandeja/components/detalle-conversacion";
+import { useDetalleConversacion } from "@/features/bandeja/hooks/conversaciones.query";
+import { opcionesDetalleConversacion } from "@/features/bandeja/utils/conversaciones.query-options";
 import { validarParametrosChat } from "@/features/bandeja/validaciones/parametros-chat";
-
 export const Route = createFileRoute("/bandeja/chat/$idChat")({
   params: { parse: validarParametrosChat },
-  loader: async ({ params, context }) => {
-    const conversacion = await context.queryClient.ensureQueryData(
-      opcionesConversacionChat(context.servicioBandeja, params.idChat),
-    );
-    if (!conversacion) throw notFound();
-  },
+  loader: ({ params, context }) =>
+    context.queryClient.ensureQueryData(
+      opcionesDetalleConversacion(context.servicioBandeja, params.idChat),
+    ),
   notFoundComponent: RecursoNoEncontrado,
   errorComponent: ErrorRuta,
   component: PantallaChat,
@@ -21,7 +18,6 @@ export const Route = createFileRoute("/bandeja/chat/$idChat")({
 function PantallaChat() {
   const { idChat } = Route.useParams();
   const { servicioBandeja } = Route.useRouteContext();
-  const { data: conversacion } = useConversacionChat(servicioBandeja, idChat);
-  if (!conversacion) throw notFound();
-  return <PanelConversacion key={idChat} conversacion={conversacion} servicio={servicioBandeja} />;
+  const { data } = useDetalleConversacion(servicioBandeja, idChat);
+  return <DetalleConversacion conversacion={data} />;
 }

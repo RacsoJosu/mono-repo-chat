@@ -4,10 +4,10 @@ import { Avatar, AvatarFallback } from "@/componentes/ui/avatar";
 import { Badge } from "@/componentes/ui/badge";
 import { Button } from "@/componentes/ui/button";
 import { Input } from "@/componentes/ui/input";
-import { conversacionesDemostracion } from "../constantes/conversaciones-demostracion";
-import { useFiltrosBandeja } from "../hooks/usar-filtros-bandeja";
-import type { ConversacionDemostracion } from "../tipos/tipos-conversacion-demostracion";
-import { InsigniaEstado } from "./insignia-estado";
+import { InsigniaEstado } from "@/features/bandeja/pruebas/demostracion/components/insignia-estado";
+import { conversacionesDemostracion } from "@/features/bandeja/pruebas/demostracion/constantes/conversaciones-demostracion";
+import { useFiltrosBandeja } from "@/features/bandeja/pruebas/demostracion/hooks/usar-filtros-bandeja";
+import type { ConversacionDemostracion } from "@/features/bandeja/pruebas/demostracion/tipos/tipos-conversacion-demostracion";
 
 function FilaConversacion({
   conversacion,

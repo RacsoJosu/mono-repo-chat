@@ -1,6 +1,7 @@
 import { useNavigate, useSearch } from "@tanstack/react-router";
+import { validarBusquedaBandeja } from "@/features/bandeja/pruebas/demostracion/validaciones/busqueda-bandeja";
 export function useFiltrosBandeja() {
-  const filtros = useSearch({ from: "/bandeja" });
+  const filtros = validarBusquedaBandeja(useSearch({ strict: false }));
   const navegar = useNavigate();
   function cambiarFiltros(cambios: { busqueda?: string; pendientes?: boolean }) {
     void navegar({

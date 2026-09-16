@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as BandejaRouteRouteImport } from './routes/bandeja/route'
+import { Route as AccesoIndexRouteImport } from './routes/acceso/index'
 import { Route as BandejaIndexRouteImport } from './routes/bandeja/index'
 import { Route as BotIndexRouteImport } from './routes/bot/index'
 import { Route as ConfiguracionIndexRouteImport } from './routes/configuracion/index'
@@ -25,6 +26,11 @@ const IndexRoute = IndexRouteImport.update({
 const BandejaRouteRoute = BandejaRouteRouteImport.update({
   id: '/bandeja',
   path: '/bandeja',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AccesoIndexRoute = AccesoIndexRouteImport.update({
+  id: '/acceso/',
+  path: '/acceso/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const BandejaIndexRoute = BandejaIndexRouteImport.update({
@@ -56,6 +62,7 @@ const BandejaChatIdChatRoute = BandejaChatIdChatRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/bandeja': typeof BandejaRouteRouteWithChildren
+  '/acceso/': typeof AccesoIndexRoute
   '/bandeja/': typeof BandejaIndexRoute
   '/bot/': typeof BotIndexRoute
   '/configuracion/': typeof ConfiguracionIndexRoute
@@ -64,6 +71,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/acceso': typeof AccesoIndexRoute
   '/bandeja': typeof BandejaIndexRoute
   '/bot': typeof BotIndexRoute
   '/configuracion': typeof ConfiguracionIndexRoute
@@ -74,6 +82,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/bandeja': typeof BandejaRouteRouteWithChildren
+  '/acceso/': typeof AccesoIndexRoute
   '/bandeja/': typeof BandejaIndexRoute
   '/bot/': typeof BotIndexRoute
   '/configuracion/': typeof ConfiguracionIndexRoute
@@ -85,6 +94,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/bandeja'
+    | '/acceso/'
     | '/bandeja/'
     | '/bot/'
     | '/configuracion/'
@@ -93,6 +103,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/acceso'
     | '/bandeja'
     | '/bot'
     | '/configuracion'
@@ -102,6 +113,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/bandeja'
+    | '/acceso/'
     | '/bandeja/'
     | '/bot/'
     | '/configuracion/'
@@ -112,6 +124,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   BandejaRouteRoute: typeof BandejaRouteRouteWithChildren
+  AccesoIndexRoute: typeof AccesoIndexRoute
   BotIndexRoute: typeof BotIndexRoute
   ConfiguracionIndexRoute: typeof ConfiguracionIndexRoute
   ContactosIndexRoute: typeof ContactosIndexRoute
@@ -131,6 +144,13 @@ declare module '@tanstack/react-router' {
       path: '/bandeja'
       fullPath: '/bandeja'
       preLoaderRoute: typeof BandejaRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/acceso/': {
+      id: '/acceso/'
+      path: '/acceso'
+      fullPath: '/acceso/'
+      preLoaderRoute: typeof AccesoIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/bandeja/': {
@@ -188,6 +208,7 @@ const BandejaRouteRouteWithChildren = BandejaRouteRoute._addFileChildren(
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   BandejaRouteRoute: BandejaRouteRouteWithChildren,
+  AccesoIndexRoute: AccesoIndexRoute,
   BotIndexRoute: BotIndexRoute,
   ConfiguracionIndexRoute: ConfiguracionIndexRoute,
   ContactosIndexRoute: ContactosIndexRoute,

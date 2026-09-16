@@ -1,5 +1,5 @@
 import { Outlet, useRouterState } from "@tanstack/react-router";
-import { ListaConversaciones } from "./lista-conversaciones";
+import { ListaConversaciones } from "@/features/bandeja/pruebas/demostracion/components/lista-conversaciones";
 
 export function LayoutBandeja() {
   const chatAbierto = useRouterState({

@@ -1,9 +1,9 @@
 import type { QueryClient } from "@tanstack/react-query";
 import { createRouter } from "@tanstack/react-router";
-import type { ServicioBandeja } from "@/features/bandeja/tipos/servicio-bandeja";
+import type { ServicioBandejaApi } from "@/features/bandeja/tipos/servicio-bandeja-api";
 import { routeTree } from "./routeTree.gen";
 
-export function crearEnrutador(queryClient: QueryClient, servicioBandeja: ServicioBandeja) {
+export function crearEnrutador(queryClient: QueryClient, servicioBandeja: ServicioBandejaApi) {
   return createRouter({ routeTree, context: { queryClient, servicioBandeja } });
 }
 

@@ -2,11 +2,11 @@ import { QueryClient } from "@tanstack/react-query";
 import { createMemoryHistory, RouterProvider } from "@tanstack/react-router";
 import { createRoot } from "react-dom/client";
 import { TooltipProvider } from "@/componentes/ui/tooltip";
-import { crearEnrutador } from "@/enrutador";
-import { crearServicioBandejaDemostracion } from "@/features/bandeja/services/bandeja-demostracion.service";
+import { crearServicioBandejaDemostracion } from "@/features/bandeja/pruebas/demostracion/services/bandeja-demostracion.service";
 import { normalizarErrorApi } from "@/lib/cliente-api/normalizar-error-api";
 import { ProveedorConsultas } from "@/proveedores/proveedor-consultas";
 import { ProveedorTema } from "@/proveedores/proveedor-tema";
+import { crearEnrutadorDemostracion as crearEnrutador } from "../enrutador-demostracion";
 import "@/internacionalizacion/configuracion";
 import "@/styles.css";
 

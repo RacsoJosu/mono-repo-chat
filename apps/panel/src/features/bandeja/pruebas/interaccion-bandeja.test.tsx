@@ -1,9 +1,9 @@
 import { act, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { afterEach, beforeEach, expect, test, vi } from "vitest";
+import { conversacionesDemostracion } from "@/features/bandeja/pruebas/demostracion/constantes/conversaciones-demostracion";
+import { crearServicioBandejaDemostracion } from "@/features/bandeja/pruebas/demostracion/services/bandeja-demostracion.service";
 import { normalizarErrorApi } from "@/lib/cliente-api/normalizar-error-api";
-import { conversacionesDemostracion } from "../constantes/conversaciones-demostracion";
-import { crearServicioBandejaDemostracion } from "../services/bandeja-demostracion.service";
 import { montarBandeja } from "./montar-bandeja";
 
 let cerrar: (() => Promise<void>) | undefined;

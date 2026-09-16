@@ -1,0 +1,36 @@
+Project bandeja_hilo { database_type: 'PostgreSQL' }
+Table organization { id text [pk] }
+Table contactos {
+ id uuid [pk, note: 'UUID v7']
+ id_empresa text [not null, ref: > organization.id]
+ nombre text [not null]
+ telefono text [not null]
+ telefono_normalizado text [not null]
+ creado_en timestamptz [not null]
+ indexes { (id_empresa, id) [unique]
+ (id_empresa, telefono_normalizado) [unique] }
+}
+Table canales_whatsapp {
+ id uuid [pk, note: 'UUID v7']
+ id_empresa text [not null, ref: > organization.id]
+ nombre text [not null]
+ telefono text [not null]
+ creado_en timestamptz [not null]
+ indexes { (id_empresa, id) [unique]
+ (id_empresa, telefono) [unique] }
+}
+Table conversaciones {
+ id uuid [pk, note: 'UUID v7']
+ id_empresa text [not null, ref: > organization.id]
+ id_contacto uuid [not null]
+ id_canal uuid [not null]
+ resumen_ultimo_mensaje varchar(500)
+ ultima_actividad timestamptz [not null]
+ creado_en timestamptz [not null]
+ indexes { (id_empresa, id_contacto, id_canal) [unique]
+ (id_empresa, ultima_actividad, id) }
+}
+Ref: conversaciones.(id_empresa, id_contacto) > contactos.(id_empresa, id)
+Ref: conversaciones.(id_empresa, id_canal) > canales_whatsapp.(id_empresa, id)
+// Fechas con precisión de milisegundos. RLS forzada por hilo.id_empresa.
+// Borrado de padres restringido. Índice de actividad e ID descendentes.

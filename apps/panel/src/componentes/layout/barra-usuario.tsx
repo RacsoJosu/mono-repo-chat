@@ -1,27 +1,40 @@
+import { useStore } from "zustand";
 import { Avatar, AvatarFallback } from "@/componentes/ui/avatar";
-import { usuarioDemostracion } from "@/constantes/usuario-demostracion";
+import { Button } from "@/componentes/ui/button";
+import { useAccesoOpcional } from "@/features/acceso/store/proveedor-sesion";
+import type { ContextoAcceso } from "@/features/acceso/tipos/contexto-acceso";
 import { BotonCambioTema } from "./boton-cambio-tema";
-import { MenuUsuario } from "./menu-usuario";
 import { SelectorIdioma } from "./selector-idioma";
 
-export function BarraUsuario() {
+function UsuarioActual({ acceso }: { acceso: ContextoAcceso }) {
+  const { sesion, empresa } = useStore(acceso.store);
   return (
-    <header className="sticky top-0 z-30 flex h-16 shrink-0 items-center justify-end gap-1 border-b border-border/60 bg-background/80 px-4 text-foreground backdrop-blur-md md:px-8">
+    <>
+      <Button
+        variant="ghost"
+        onClick={() => acceso.coordinador.seleccionar(null)}
+        aria-label="Cambiar empresa"
+        className="max-w-24 truncate sm:max-w-48"
+      >
+        {empresa?.name}
+      </Button>
+      <Avatar className="size-8">
+        <AvatarFallback>{sesion?.usuario.nombre.slice(0, 1)}</AvatarFallback>
+      </Avatar>
+      <span className="hidden truncate text-sm sm:block">{sesion?.usuario.nombre}</span>
+      <Button variant="ghost" onClick={() => void acceso.coordinador.cerrar()}>
+        Cerrar sesión
+      </Button>
+    </>
+  );
+}
+export function BarraUsuario() {
+  const acceso = useAccesoOpcional();
+  return (
+    <header className="sticky top-0 z-30 flex h-16 shrink-0 items-center justify-end gap-1 overflow-hidden border-b border-border/60 bg-background/80 px-2 backdrop-blur-md md:px-8">
       <BotonCambioTema />
       <SelectorIdioma />
-
-      <div className="ml-2 flex items-center gap-2 border-l border-sidebar-border pl-3">
-        <Avatar className="size-8">
-          <AvatarFallback>{usuarioDemostracion.iniciales}</AvatarFallback>
-        </Avatar>
-        <span className="hidden min-w-0 text-left sm:block">
-          <span className="block truncate text-sm font-medium">{usuarioDemostracion.nombre}</span>
-          <span className="block text-xs text-sidebar-foreground/75">
-            {usuarioDemostracion.rol}
-          </span>
-        </span>
-        <MenuUsuario />
-      </div>
+      {acceso && <UsuarioActual acceso={acceso} />}
     </header>
   );
 }

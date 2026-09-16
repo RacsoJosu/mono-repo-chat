@@ -1,6 +1,6 @@
 import { Badge } from "@/componentes/ui/badge";
-import { contenidoEstadosAtencion } from "../constantes/estados-atencion";
-import type { EstadoAtencion } from "../tipos/tipos-conversacion-demostracion";
+import { contenidoEstadosAtencion } from "@/features/bandeja/pruebas/demostracion/constantes/estados-atencion";
+import type { EstadoAtencion } from "@/features/bandeja/pruebas/demostracion/tipos/tipos-conversacion-demostracion";
 
 export function InsigniaEstado({ estado }: { estado: EstadoAtencion }) {
   const { etiqueta, icono: Icono, variante } = contenidoEstadosAtencion[estado];

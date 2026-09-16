@@ -1,5 +1,5 @@
 import { infiniteQueryOptions, queryOptions } from "@tanstack/react-query";
-import type { ServicioBandeja } from "../tipos/servicio-bandeja";
+import type { ServicioBandeja } from "@/features/bandeja/pruebas/demostracion/tipos/servicio-bandeja";
 
 export function opcionesMensajesChat(servicio: ServicioBandeja, id: string) {
   return infiniteQueryOptions({

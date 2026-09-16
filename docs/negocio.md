@@ -135,3 +135,11 @@ El [DBML de identidad](architecture/identidad.dbml) y el [procedimiento de migra
 ### Avance de acceso de personas
 
 Se implementaron sesiones Better Auth con PostgreSQL, cambio de clave inicial, TOTP, códigos de recuperación de un uso, CSRF y bootstrap idempotente. Continúan pendientes autorización por membresía, RLS, auditoría persistida, OAuth externo y conexión del panel. El detalle y los comandos están en arquitectura backend. No se considera completado el plan de autenticación.
+
+## Bandeja conectada y sesiones — implementación inicial
+
+Se implementan exclusivamente lectura de lista con búsqueda/cursor y detalle por UUID v7. Contactos y canales pertenecen a empresas; las claves compuestas y RLS impiden relaciones cruzadas. No hay mensajes, estados de lectura ni tiempo real en esta entrega. Los roles owner/admin/member existentes permiten lectura dentro de su membresía; no se habilitan integraciones OAuth de negocio todavía.
+
+Se confirma sesión Better Auth por cookie, sin access/refresh tokens en el panel. Zustand coordina interfaz, expiración y empresa; Query conserva los datos remotos. Inicio y cierre se sincronizan entre pestañas del mismo origen, con confirmación de servidor. La renovación no borra empresa ni caché. Un 401 viejo no puede cerrar una sesión nueva. Cerrar cancela solicitudes y oculta datos de inmediato; el fallo de revocación se informa y ofrece reintento.
+
+La conexión runtime tiene lectura sobre bandeja y no es propietaria ni puede desactivar RLS. Migraciones y semillas usan conexión administrativa separada. `seed:inbox` usa Faker reproducible y no cambia identidades ni datos ya existentes. Los contratos, límites y comandos están en docs/architecture/bandeja.md; la sesión en docs/architecture/frontend/sesion.md.

@@ -3,11 +3,11 @@ import { esquemaIdChat } from "@chatbot-whatsapp/compartido";
 import { QueryClient } from "@tanstack/react-query";
 import { createMemoryHistory, createRouter } from "@tanstack/react-router";
 import { test } from "vitest";
-import { conversacionesDemostracion } from "@/features/bandeja/constantes/conversaciones-demostracion";
-import { crearServicioBandejaDemostracion } from "@/features/bandeja/services/bandeja-demostracion.service";
-import { validarBusquedaBandeja } from "@/features/bandeja/validaciones/busqueda-bandeja";
+import { conversacionesDemostracion } from "@/features/bandeja/pruebas/demostracion/constantes/conversaciones-demostracion";
+import { crearServicioBandejaDemostracion } from "@/features/bandeja/pruebas/demostracion/services/bandeja-demostracion.service";
+import { validarBusquedaBandeja } from "@/features/bandeja/pruebas/demostracion/validaciones/busqueda-bandeja";
 import { validarParametrosChat } from "@/features/bandeja/validaciones/parametros-chat";
-import { routeTree } from "@/routeTree.gen";
+import { arbolDemostracion as routeTree } from "./enrutador-demostracion";
 
 test("acepta UUID v7 y rechaza versiones distintas e IDs nominales", () => {
   assert.ok(esquemaIdChat.safeParse(conversacionesDemostracion[0].id).success);

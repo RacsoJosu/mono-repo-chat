@@ -1,9 +1,9 @@
 import assert from "node:assert/strict";
 import { InfiniteQueryObserver, QueryClient } from "@tanstack/react-query";
 import { test } from "vitest";
-import { conversacionesDemostracion } from "@/features/bandeja/constantes/conversaciones-demostracion";
-import { crearServicioBandejaDemostracion } from "@/features/bandeja/services/bandeja-demostracion.service";
-import { opcionesMensajesChat } from "@/features/bandeja/utils/bandeja.query-options";
+import { conversacionesDemostracion } from "@/features/bandeja/pruebas/demostracion/constantes/conversaciones-demostracion";
+import { crearServicioBandejaDemostracion } from "@/features/bandeja/pruebas/demostracion/services/bandeja-demostracion.service";
+import { opcionesMensajesChat } from "@/features/bandeja/pruebas/demostracion/utils/bandeja.query-options";
 import { normalizarErrorApi } from "@/lib/cliente-api/normalizar-error-api";
 
 test("fallo del historial conserva páginas y permite reintentar el mismo cursor", async () => {

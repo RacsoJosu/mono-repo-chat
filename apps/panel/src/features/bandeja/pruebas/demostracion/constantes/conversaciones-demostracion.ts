@@ -1,4 +1,4 @@
-import type { ConversacionDemostracion } from "../tipos/tipos-conversacion-demostracion";
+import type { ConversacionDemostracion } from "@/features/bandeja/pruebas/demostracion/tipos/tipos-conversacion-demostracion";
 
 export const conversacionesDemostracion: readonly ConversacionDemostracion[] = [
   {

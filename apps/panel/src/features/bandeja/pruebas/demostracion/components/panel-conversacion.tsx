@@ -11,10 +11,10 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/componentes/ui/sheet";
-import type { ServicioBandeja } from "../tipos/servicio-bandeja";
-import type { ConversacionDemostracion } from "../tipos/tipos-conversacion-demostracion";
-import { InsigniaEstado } from "./insignia-estado";
-import { MensajesChat } from "./mensajes-chat";
+import { InsigniaEstado } from "@/features/bandeja/pruebas/demostracion/components/insignia-estado";
+import { MensajesChat } from "@/features/bandeja/pruebas/demostracion/components/mensajes-chat";
+import type { ServicioBandeja } from "@/features/bandeja/pruebas/demostracion/tipos/servicio-bandeja";
+import type { ConversacionDemostracion } from "@/features/bandeja/pruebas/demostracion/tipos/tipos-conversacion-demostracion";
 
 export function PanelConversacion({
   conversacion,

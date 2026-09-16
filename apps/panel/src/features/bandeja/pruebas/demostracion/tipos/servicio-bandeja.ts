@@ -1,4 +1,4 @@
-import type { ConversacionDemostracion } from "./tipos-conversacion-demostracion";
+import type { ConversacionDemostracion } from "@/features/bandeja/pruebas/demostracion/tipos/tipos-conversacion-demostracion";
 export interface MensajeChat {
   id: string;
   texto: string;

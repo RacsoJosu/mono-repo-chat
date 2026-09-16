@@ -1,8 +1,8 @@
 import assert from "node:assert/strict";
 import { QueryClient } from "@tanstack/react-query";
 import { test } from "vitest";
-import { crearServicioBandejaDemostracion } from "@/features/bandeja/services/bandeja-demostracion.service";
-import { opcionesMensajesChat } from "@/features/bandeja/utils/bandeja.query-options";
+import { crearServicioBandejaDemostracion } from "@/features/bandeja/pruebas/demostracion/services/bandeja-demostracion.service";
+import { opcionesMensajesChat } from "@/features/bandeja/pruebas/demostracion/utils/bandeja.query-options";
 
 test("recorre todo el historial sin duplicar ni perder mensajes", async () => {
   const servicio = crearServicioBandejaDemostracion();

@@ -1,5 +1,5 @@
 import { Bot, Clock3, Headphones } from "lucide-react";
-import type { EstadoAtencion } from "../tipos/tipos-conversacion-demostracion";
+import type { EstadoAtencion } from "@/features/bandeja/pruebas/demostracion/tipos/tipos-conversacion-demostracion";
 
 export const contenidoEstadosAtencion = {
   pendiente: { etiqueta: "Esperando", icono: Clock3, variante: "secondary" },

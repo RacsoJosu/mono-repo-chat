@@ -88,3 +88,14 @@
 
 
 - Genera el esquema de Better Auth únicamente mediante su CLI oficial (`pnpm db:identidad`). No conviertas `getSchema` con scripts propios ni edites el archivo generado. Sus identificadores externos son una excepción a los nombres en español.
+
+## Bandeja y sesión
+
+- La [memoria de negocio](docs/negocio.md) registra las decisiones; consultar también [bandeja](docs/architecture/bandeja.md) y [sesiones](docs/architecture/frontend/sesion.md).
+- Los comandos nuevos se nombran en inglés: `seed:inbox`, `db:configure-runtime`.
+- Better Auth mantiene las credenciales en cookies HttpOnly. Zustand es una proyección de interfaz en memoria; no persistir sesiones ni tokens ni duplicar conversaciones de Query.
+- Las operaciones de cookies se serializan entre pestañas. Vincular peticiones y efectos asíncronos a la generación de sesión; un 401 antiguo no invalida una identidad nueva.
+- Cambiar de identidad/empresa cancela consultas y limpia datos privados. Un 403 de permisos no cierra sesión.
+- El runtime PostgreSQL debe estar separado del propietario; aplicar y forzar RLS y establecer empresa dentro de la transacción.
+- Mantener el esquema Better Auth generado por CLI oficial; generar migraciones con Drizzle CLI. No modificar versiones ya aplicadas.
+- Pruebas Vitest en pruebas de cada feature/módulo, Playwright en pruebas/navegador; mantener el ciclo rojo-verde-refactor para cambios de comportamiento.

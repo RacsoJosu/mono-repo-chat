@@ -2,11 +2,11 @@ import { QueryClient } from "@tanstack/react-query";
 import { createMemoryHistory, RouterProvider } from "@tanstack/react-router";
 import { act, render } from "@testing-library/react";
 import { TooltipProvider } from "@/componentes/ui/tooltip";
-import { crearEnrutador } from "@/enrutador";
+import { crearServicioBandejaDemostracion } from "@/features/bandeja/pruebas/demostracion/services/bandeja-demostracion.service";
+import type { ServicioBandeja } from "@/features/bandeja/pruebas/demostracion/tipos/servicio-bandeja";
 import { ProveedorConsultas } from "@/proveedores/proveedor-consultas";
 import { ProveedorTema } from "@/proveedores/proveedor-tema";
-import { crearServicioBandejaDemostracion } from "../services/bandeja-demostracion.service";
-import type { ServicioBandeja } from "../tipos/servicio-bandeja";
+import { crearEnrutadorDemostracion as crearEnrutador } from "./enrutador-demostracion";
 import "@/internacionalizacion/configuracion";
 
 export async function montarBandeja(

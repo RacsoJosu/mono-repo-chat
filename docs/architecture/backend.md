@@ -200,3 +200,7 @@ El DBML de identidad está en [identidad.dbml](identidad.dbml). Drizzle es el ú
 Las pruebas PostgreSQL cubren cambio de clave, TOTP, recuperación de un solo uso, expiración, revocación, CSRF y bootstrap idempotente. Para ejecutarlas, usar una base local exclusiva con las migraciones actuales y URL_BASE_DE_DATOS_PRUEBAS.
 
 La entrega completa de autenticación sigue pendiente: interfaz de acceso, selección y aislamiento de caché por empresa, permisos por membresía, cambios de propietarios con reautenticación, auditoría persistida, RLS y acceso OAuth de integraciones. Los endpoints OAuth permanecen cerrados hasta implementar sus verificaciones. No considerar la autenticación completa ni desplegar acceso empresarial como terminado.
+
+## Bandeja HTTP y sesiones (implementación vigente)
+
+La bandeja productiva consume la API con búsqueda y cursores; las referencias anteriores a servicios de demostración describen únicamente escenarios de pruebas. Véase [bandeja](bandeja.md) y [sesión del panel](frontend/sesion.md). Estos documentos definen el contrato vigente, RLS, comandos administrativos, Faker, Zustand y sincronización entre pestañas.
