@@ -1,10 +1,11 @@
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { QueryClient } from "@tanstack/react-query";
 import { createMemoryHistory, RouterProvider } from "@tanstack/react-router";
 import { createRoot } from "react-dom/client";
 import { TooltipProvider } from "@/componentes/ui/tooltip";
 import { crearEnrutador } from "@/enrutador";
 import { crearServicioBandejaDemostracion } from "@/features/bandeja/services/bandeja-demostracion.service";
 import { normalizarErrorApi } from "@/lib/cliente-api/normalizar-error-api";
+import { ProveedorConsultas } from "@/proveedores/proveedor-consultas";
 import { ProveedorTema } from "@/proveedores/proveedor-tema";
 import "@/internacionalizacion/configuracion";
 import "@/styles.css";
@@ -12,7 +13,7 @@ import "@/styles.css";
 const escenario = new URLSearchParams(location.search).get("escenario");
 let fallar = true;
 const original = crearServicioBandejaDemostracion();
-const clienteConsultas = new QueryClient({ defaultOptions: { queries: { retry: false } } });
+const queryClient = new QueryClient({ defaultOptions: { queries: { retry: false } } });
 const servicio = {
   ...original,
   async obtenerConversacion(idChat: string) {
@@ -33,9 +34,9 @@ const servicio = {
     return original.obtenerMensajes(entrada);
   },
 };
-const enrutador = crearEnrutador(clienteConsultas, servicio);
+const enrutador = crearEnrutador(queryClient, servicio);
 enrutador.update({
-  context: { clienteConsultas, servicioBandeja: servicio },
+  context: { queryClient, servicioBandeja: servicio },
   history: createMemoryHistory({
     initialEntries: ["/bandeja/chat/01994bd0-1234-7000-8000-000000000001"],
   }),
@@ -45,9 +46,9 @@ if (!elementoRaiz) throw new Error("Falta la raíz de pruebas.");
 createRoot(elementoRaiz).render(
   <ProveedorTema>
     <TooltipProvider>
-      <QueryClientProvider client={clienteConsultas}>
+      <ProveedorConsultas queryClient={queryClient}>
         <RouterProvider router={enrutador} />
-      </QueryClientProvider>
+      </ProveedorConsultas>
     </TooltipProvider>
   </ProveedorTema>,
 );

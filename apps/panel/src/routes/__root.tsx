@@ -7,7 +7,7 @@ import { PantallaCargando } from "@/componentes/layout/pantalla-cargando";
 import type { ServicioBandeja } from "@/features/bandeja/tipos/servicio-bandeja";
 
 export const Route = createRootRouteWithContext<{
-  clienteConsultas: QueryClient;
+  queryClient: QueryClient;
   servicioBandeja: ServicioBandeja;
 }>()({
   component: LayoutPanel,

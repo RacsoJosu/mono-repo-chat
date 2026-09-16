@@ -74,3 +74,4 @@
 - Prueba resultados observables con dependencias reales o fronteras inyectadas; no inspecciones texto de código o configuración ni dupliques lógica productiva en expectativas.
 - Aísla y limpia QueryClient, proveedores e instancias de servidor por prueba. Ninguna prueba ni escenario se incluye en artefactos productivos.
 - `pnpm probar` ejecuta Vitest mediante Turbo; `pnpm verificar` comprueba formato, tipos productivos, tipos de pruebas y suites. Ejecuta Playwright cuando se afecten flujos de navegador.
+- El nombre `queryClient` y la factoría `crearQueryClient` son excepciones aprobadas. Crea una instancia por arranque del panel y compártela entre el proveedor de React y el contexto de todas las rutas; cada prueba usa una instancia aislada.

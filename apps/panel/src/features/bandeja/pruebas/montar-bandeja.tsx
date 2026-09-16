@@ -1,8 +1,9 @@
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { QueryClient } from "@tanstack/react-query";
 import { createMemoryHistory, RouterProvider } from "@tanstack/react-router";
 import { act, render } from "@testing-library/react";
 import { TooltipProvider } from "@/componentes/ui/tooltip";
 import { crearEnrutador } from "@/enrutador";
+import { ProveedorConsultas } from "@/proveedores/proveedor-consultas";
 import { ProveedorTema } from "@/proveedores/proveedor-tema";
 import { crearServicioBandejaDemostracion } from "../services/bandeja-demostracion.service";
 import type { ServicioBandeja } from "../tipos/servicio-bandeja";
@@ -12,12 +13,12 @@ export async function montarBandeja(
   ruta = "/bandeja",
   servicio: ServicioBandeja = crearServicioBandejaDemostracion(),
 ) {
-  const clienteConsultas = new QueryClient({
+  const queryClient = new QueryClient({
     defaultOptions: { queries: { retry: false, gcTime: Infinity } },
   });
-  const enrutador = crearEnrutador(clienteConsultas, servicio);
+  const enrutador = crearEnrutador(queryClient, servicio);
   enrutador.update({
-    context: { clienteConsultas, servicioBandeja: servicio },
+    context: { queryClient, servicioBandeja: servicio },
     history: createMemoryHistory({ initialEntries: [ruta] }),
   });
   await act(async () => {
@@ -26,18 +27,19 @@ export async function montarBandeja(
   const vista = render(
     <ProveedorTema>
       <TooltipProvider>
-        <QueryClientProvider client={clienteConsultas}>
+        <ProveedorConsultas queryClient={queryClient}>
           <RouterProvider router={enrutador} />
-        </QueryClientProvider>
+        </ProveedorConsultas>
       </TooltipProvider>
     </ProveedorTema>,
   );
   return {
     enrutador,
+    queryClient: queryClient,
     cerrar: async () => {
       vista.unmount();
-      await clienteConsultas.cancelQueries();
-      clienteConsultas.clear();
+      await queryClient.cancelQueries();
+      queryClient.clear();
     },
   };
 }

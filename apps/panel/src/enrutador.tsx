@@ -3,8 +3,8 @@ import { createRouter } from "@tanstack/react-router";
 import type { ServicioBandeja } from "@/features/bandeja/tipos/servicio-bandeja";
 import { routeTree } from "./routeTree.gen";
 
-export function crearEnrutador(clienteConsultas: QueryClient, servicioBandeja: ServicioBandeja) {
-  return createRouter({ routeTree, context: { clienteConsultas, servicioBandeja } });
+export function crearEnrutador(queryClient: QueryClient, servicioBandeja: ServicioBandeja) {
+  return createRouter({ routeTree, context: { queryClient, servicioBandeja } });
 }
 
 declare module "@tanstack/react-router" {

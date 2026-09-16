@@ -1,7 +1,11 @@
-import { useInfiniteQuery } from "@tanstack/react-query";
+import { useInfiniteQuery, useSuspenseQuery } from "@tanstack/react-query";
 import type { ServicioBandeja } from "../tipos/servicio-bandeja";
-import { opcionesMensajesChat } from "../utils/bandeja.query-options";
+import { opcionesConversacionChat, opcionesMensajesChat } from "../utils/bandeja.query-options";
 
 export function useMensajesChat(servicio: ServicioBandeja, id: string) {
   return useInfiniteQuery(opcionesMensajesChat(servicio, id));
+}
+
+export function useConversacionChat(servicio: ServicioBandeja, idChat: string) {
+  return useSuspenseQuery(opcionesConversacionChat(servicio, idChat));
 }

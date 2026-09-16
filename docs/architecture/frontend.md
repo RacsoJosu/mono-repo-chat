@@ -49,8 +49,8 @@ apps/panel/
       ui/                         # Primitivas shadcn compartidas
       layout/                     # Marco del panel, sidebar y cabeceras
     lib/                          # Infraestructura transversal del panel
-      cliente-consultas.ts
-    proveedores/
+      cliente-api/                # Normalización segura de errores HTTP
+    proveedores/                  # Configuración de Query y proveedores React
     enrutador.tsx                 # Crea el router a partir del árbol generado
     routeTree.gen.ts              # Generado por TanStack Router; no editar a mano
     main.tsx                      # Montaje de React y composición de proveedores
@@ -219,3 +219,14 @@ Referencias: [rutas y carga diferida de TanStack](https://tanstack.com/router/la
 - `tsconfig.pruebas.json` comprueba pruebas y configuración sin emitir archivos. La configuración productiva excluye carpetas `pruebas`; Vite compila únicamente la entrada real.
 - Para nuevas funcionalidades o correcciones: escribir una prueba de comportamiento, observar el fallo esperado, implementar lo mínimo y refactorizar manteniéndola verde. Al migrar suites existentes se conserva su cobertura, sin reescribir código funcional para generar fallos artificiales.
 - No se escriben pruebas que inspeccionen texto de configuración, detalles privados o constantes aisladas. Se comprueban resultados observables con expectativas independientes. No hay porcentaje de cobertura obligatorio.
+
+### Proveedor y contexto de TanStack Query
+
+- `main.tsx` llama una sola vez a `crearQueryClient`, definida en `proveedores/configuracion-query.ts`. La misma instancia se entrega a `ProveedorConsultas` y a `crearEnrutador`.
+- `ProveedorConsultas` monta `QueryClientProvider` y `QueryErrorResetBoundary`. No crea clientes durante el render. El contexto tipado de la ruta raíz declara `queryClient` y todas las rutas hijas reciben esa misma instancia; no existe un cliente por ruta. Cada montaje de pruebas usa una instancia aislada.
+- El nombre `queryClient` y la factoría `crearQueryClient` son excepciones de nomenclatura aprobadas. Este contexto es inyección de dependencias del router, no una segunda caché.
+- Valores generales: datos frescos durante 60 segundos, retención de consultas inactivas durante 5 minutos, un reintento de consultas, sin recarga automática al enfocar la ventana y sin reintentos de mutaciones.
+- La conversación define una clave por chat y opciones reutilizadas por `ensureQueryData` en el loader y `useSuspenseQuery` en el hook de bandeja. Los mensajes conservan una clave independiente y su consulta infinita.
+- `ensureQueryData` reutiliza datos existentes. Al montar el hook, una conversación desactualizada se refresca en segundo plano; las actualizaciones de caché se reflejan en la pantalla. No se usa `useLoaderData` como copia del estado remoto.
+- Ausencia de conversación se representa con `null` en Query, porque no admite `undefined` como resultado exitoso; la ruta la convierte en `notFound()`. Los errores de API se propagan sin `catch` y `ErrorRuta` los presenta mediante `PantallaError`, incluido el 404.
+- La consulta de conversación no reintenta automáticamente: muestra el fallo y permite recuperación explícita. `ErrorRuta` restablece el límite de Query y al reintentar invalida los loaders. Los parámetros inválidos siguen deteniendo la navegación antes de consultar.

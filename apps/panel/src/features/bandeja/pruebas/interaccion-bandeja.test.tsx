@@ -1,7 +1,8 @@
-import { screen, waitFor, within } from "@testing-library/react";
+import { act, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { afterEach, beforeEach, expect, test, vi } from "vitest";
 import { normalizarErrorApi } from "@/lib/cliente-api/normalizar-error-api";
+import { conversacionesDemostracion } from "../constantes/conversaciones-demostracion";
 import { crearServicioBandejaDemostracion } from "../services/bandeja-demostracion.service";
 import { montarBandeja } from "./montar-bandeja";
 
@@ -115,4 +116,17 @@ test("un fallo del historial conserva mensajes y el reintento agrega los anterio
       .slice(-20)
       .map((mensaje) => mensaje.textContent),
   ).toEqual(mensajesPrevios);
+});
+
+test("la conversación se actualiza cuando cambia la caché compartida", async () => {
+  const vista = await montarBandeja("/bandeja/chat/01994bd0-1234-7000-8000-000000000001");
+  cerrar = vista.cerrar;
+  await screen.findByRole("heading", { name: "Andrea López" });
+  await act(async () => {
+    vista.queryClient.setQueryData(
+      ["bandeja", "chat", "01994bd0-1234-7000-8000-000000000001", "conversacion"],
+      { ...conversacionesDemostracion[0], nombre: "Andrea actualizada" },
+    );
+  });
+  expect(await screen.findByRole("heading", { name: "Andrea actualizada" })).toBeVisible();
 });

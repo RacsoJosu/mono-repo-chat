@@ -38,13 +38,13 @@ test("el router impide consultar IDs inválidos y conserva el 404 de recursos au
   ]) {
     let llamadas = 0;
     const original = crearServicioBandejaDemostracion();
-    const clienteConsultas = new QueryClient();
+    const queryClient = new QueryClient();
     const enrutador = createRouter({
       isServer: false,
       routeTree,
       history: createMemoryHistory({ initialEntries: [`/bandeja/chat/${idChat}`] }),
       context: {
-        clienteConsultas,
+        queryClient,
         servicioBandeja: {
           ...original,
           obtenerConversacion: async (identificador) => {
@@ -62,7 +62,36 @@ test("el router impide consultar IDs inválidos y conserva el 404 de recursos au
         idChat === conversacionesDemostracion[0].id ? "success" : "notFound",
       );
     } finally {
-      clienteConsultas.clear();
+      queryClient.clear();
     }
+  }
+});
+
+test("el loader reutiliza la conversación disponible en Query sin llamar al servicio", async () => {
+  const queryClient = new QueryClient();
+  const conversacion = conversacionesDemostracion[0];
+  queryClient.setQueryData(["bandeja", "chat", conversacion.id, "conversacion"], conversacion);
+  let llamadas = 0;
+  const original = crearServicioBandejaDemostracion();
+  const enrutador = createRouter({
+    routeTree,
+    history: createMemoryHistory({ initialEntries: [`/bandeja/chat/${conversacion.id}`] }),
+    context: {
+      queryClient,
+      servicioBandeja: {
+        ...original,
+        obtenerConversacion: async () => {
+          llamadas++;
+          return conversacion;
+        },
+      },
+    },
+  });
+  try {
+    await enrutador.load();
+    assert.equal(enrutador.state.matches.at(-1)?.status, "success");
+    assert.equal(llamadas, 0);
+  } finally {
+    queryClient.clear();
   }
 });
