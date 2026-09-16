@@ -2,6 +2,9 @@
 
 ## Fuente de verdad
 
+- La memoria de negocio está en [docs/negocio.md](docs/negocio.md). Léela antes de diseñar o modificar funcionalidades, contratos, tablas o permisos. Respeta las decisiones acordadas y no trates propuestas pendientes como requisitos aprobados.
+- Cuando se acuerde o cambie una regla de negocio, actualiza esa memoria y la arquitectura afectada en el mismo cambio; distingue lo decidido de lo implementado.
+
 - La arquitectura del proyecto se define en [ARCHITECTURE.md](ARCHITECTURE.md).
 - Las reglas específicas están en [backend](docs/architecture/backend.md) y [frontend](docs/architecture/frontend.md).
 - Antes de crear, mover o modificar código, identifica la funcionalidad de negocio afectada y respeta la capa a la que pertenece.
