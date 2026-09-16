@@ -100,7 +100,7 @@ La misma lista de opciones de navegación alimenta el `SidebarMenu` en escritori
 ## Bandeja centrada en la conversación
 
 - `/bandeja` muestra la cola y un estado de selección. `/` redirige a ella.
-- `/bandeja/chat/$id` es hija del layout de bandeja: valida el identificador y carga el contacto; los identificadores desconocidos muestran 404.
+- `/bandeja/chat/$idChat` es hija del layout de bandeja: valida el identificador y carga el contacto; los identificadores desconocidos muestran 404.
 - El layout ocupa el alto disponible hasta el borde inferior. La lista y los mensajes tienen scroll independiente; el encabezado del chat y el compositor permanecen visibles.
 - Las filas de chats llegan al borde de la lista y se separan con divisores. La selección usa un indicador lateral y no tarjetas individuales.
 - En móvil se muestra lista o conversación según la ruta; el chat oculta la navegación inferior y ofrece volver en su encabezado; volver a la lista conserva el layout y sus filtros.

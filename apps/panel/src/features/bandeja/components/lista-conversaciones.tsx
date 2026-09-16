@@ -1,11 +1,11 @@
 import { Link, useRouterState } from "@tanstack/react-router";
 import { Search, SearchX, SlidersHorizontal } from "lucide-react";
-import { useState } from "react";
 import { Avatar, AvatarFallback } from "@/componentes/ui/avatar";
 import { Badge } from "@/componentes/ui/badge";
 import { Button } from "@/componentes/ui/button";
 import { Input } from "@/componentes/ui/input";
 import { conversacionesDemostracion } from "../constantes/conversaciones-demostracion";
+import { useFiltrosBandeja } from "../hooks/usar-filtros-bandeja";
 import type { ConversacionDemostracion } from "../tipos/tipos-conversacion-demostracion";
 import { InsigniaEstado } from "./insignia-estado";
 
@@ -23,8 +23,9 @@ function FilaConversacion({
       className={`h-auto w-full items-start justify-start gap-3 rounded-none border-b border-l-2 border-border/60 px-4 py-4 text-left transition-colors duration-200 motion-reduce:transition-none hover:bg-accent ${seleccionada ? "border-l-primary bg-secondary hover:bg-secondary" : "border-l-transparent"}`}
     >
       <Link
-        to="/bandeja/chat/$id"
-        params={{ id: conversacion.id }}
+        to="/bandeja/chat/$idChat"
+        search={(anteriores) => anteriores}
+        params={{ idChat: conversacion.id }}
         aria-current={seleccionada ? "page" : undefined}
       >
         <Avatar className="size-10 shrink-0">
@@ -54,8 +55,7 @@ function FilaConversacion({
 
 export function ListaConversaciones() {
   const rutaActual = useRouterState({ select: (estado) => estado.location.pathname });
-  const [busqueda, establecerBusqueda] = useState("");
-  const [soloPendientes, establecerSoloPendientes] = useState(false);
+  const { busqueda, pendientes: soloPendientes, cambiarFiltros } = useFiltrosBandeja();
   const consulta = busqueda.trim().toLocaleLowerCase("es");
   const conversacionesVisibles = conversacionesDemostracion.filter(
     (conversacion) =>
@@ -74,7 +74,7 @@ export function ListaConversaciones() {
             size="icon"
             aria-label="Mostrar solo conversaciones pendientes"
             aria-pressed={soloPendientes}
-            onClick={() => establecerSoloPendientes(!soloPendientes)}
+            onClick={() => cambiarFiltros({ pendientes: !soloPendientes })}
             className={
               soloPendientes ? "rounded-xl bg-accent text-accent-foreground" : "rounded-xl"
             }
@@ -86,7 +86,7 @@ export function ListaConversaciones() {
           <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
           <Input
             value={busqueda}
-            onChange={(evento) => establecerBusqueda(evento.target.value)}
+            onChange={(evento) => cambiarFiltros({ busqueda: evento.target.value })}
             aria-label="Buscar conversaciones"
             className="h-10 rounded-xl border-input/60 bg-background/60 pl-9 shadow-none"
             placeholder="Buscar conversaciones…"
@@ -109,8 +109,7 @@ export function ListaConversaciones() {
               variant="outline"
               className="mt-4 rounded-xl"
               onClick={() => {
-                establecerBusqueda("");
-                establecerSoloPendientes(false);
+                cambiarFiltros({ busqueda: "", pendientes: false });
               }}
             >
               Limpiar búsqueda
@@ -121,7 +120,7 @@ export function ListaConversaciones() {
           <FilaConversacion
             key={conversacion.id}
             conversacion={conversacion}
-            seleccionada={rutaActual === `/bandeja/chat/${conversacion.id}`}
+            seleccionada={rutaActual.toLowerCase() === `/bandeja/chat/${conversacion.id}`}
           />
         ))}
       </div>

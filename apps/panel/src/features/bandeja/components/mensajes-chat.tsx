@@ -1,4 +1,5 @@
 import { Bot } from "lucide-react";
+import { PantallaError } from "@/componentes/errores/pantalla-error";
 import { Button } from "@/componentes/ui/button";
 import { Skeleton } from "@/componentes/ui/skeleton";
 import { useMensajesChat } from "../hooks/bandeja.query";
@@ -29,20 +30,18 @@ export function MensajesChat({ id, servicio }: { id: string; servicio: ServicioB
         </div>
       )}
       {consulta.isError && mensajes.length === 0 && (
-        <div role="alert" className="py-8 text-center">
-          <p className="text-sm text-muted-foreground">No se pudieron cargar los mensajes.</p>
-          <Button variant="outline" className="mt-3" onClick={() => void consulta.refetch()}>
-            Reintentar
-          </Button>
-        </div>
+        <PantallaError error={consulta.error} reintentar={() => void consulta.refetch()} />
       )}
       {mensajes.length > 0 && (
         <div className="mx-auto max-w-3xl">
           <div className="mb-6 flex h-9 items-center justify-center">
             {consulta.isFetchNextPageError ? (
-              <Button variant="outline" onClick={() => void cargar()}>
-                Reintentar historial
-              </Button>
+              <div role="alert" className="flex items-center gap-2 text-xs text-muted-foreground">
+                <span>No se pudo cargar el historial.</span>
+                <Button variant="outline" onClick={() => void cargar()}>
+                  Reintentar historial
+                </Button>
+              </div>
             ) : consulta.hasNextPage ? (
               <Button
                 variant="ghost"

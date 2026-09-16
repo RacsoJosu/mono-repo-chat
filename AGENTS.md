@@ -38,6 +38,12 @@
 - Evita archivos "utils" genéricos. Toda utilidad debe tener un propósito y un nombre de dominio o técnico preciso.
 - Una funcionalidad nueva debe incluir pruebas proporcionadas al riesgo: dominio y servicios con pruebas unitarias; flujos HTTP críticos con pruebas de integración.
 
+## Rutas y validación del panel
+
+- Organiza las rutas por carpetas de funcionalidad con `route.tsx`, `index.tsx` y segmentos dinámicos descriptivos. Conserva generación de `routeTree.gen.ts` y carga diferida automática del plugin Vite.
+- Valida parámetros y búsquedas con Zod; `idChat` es UUID v7 mediante el esquema compartido. Un ID inválido no consulta servicios. Los filtros inválidos recuperan valores predeterminados y la URL se normaliza mediante reemplazo del historial.
+- Los errores de navegación, recursos, API y cliente usan las composiciones de `componentes/errores` y el contrato seguro de `ErrorApi` descritos en la arquitectura.
+
 ## Dirección visual del frontend
 
 - En tareas de interfaz, actúa como Lead UI/UX Engineer y Diseñador Frontend Senior especializado en Tailwind CSS y shadcn/ui. Diseña pantallas modernas y refinadas con identidad propia de Hilo.

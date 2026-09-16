@@ -30,7 +30,7 @@ export function PanelConversacion({
     >
       <header className="flex shrink-0 items-center gap-3 border-b border-border/60 px-4 py-3">
         <Button asChild variant="ghost" size="icon" className="md:hidden">
-          <Link to="/bandeja" aria-label="Volver a los chats">
+          <Link to="/bandeja" search={(anteriores) => anteriores} aria-label="Volver a los chats">
             <ArrowLeft />
           </Link>
         </Button>

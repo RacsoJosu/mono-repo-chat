@@ -19,10 +19,14 @@ apps/panel/
   src/
     routes/
       __root.tsx                  # Layout raíz y manejo global de errores
-      index.tsx                   # Ruta /
-      contactos.tsx               # Ruta /contactos
-      bot.tsx                     # Ruta /bot
-      configuracion.tsx           # Ruta /configuracion
+      index.tsx                   # Redirección a /bandeja
+      bandeja/
+        route.tsx                 # Layout y filtros de bandeja
+        index.tsx                 # Selección de chat
+        chat/$idChat.tsx          # Parámetro UUID v7
+      contactos/index.tsx         # Ruta /contactos
+      bot/index.tsx               # Ruta /bot
+      configuracion/index.tsx     # Ruta /configuracion
     features/
       bandeja/
         components/               # Pantallas y componentes de la bandeja
@@ -95,7 +99,7 @@ El frontend consume el contrato definido por el backend y lo transforma una úni
 class ErrorApi extends Error {
   readonly codigo: string;
   readonly estadoHttp: number;
-  readonly detalles: DetalleValidacion[];
+  readonly detalles: DetalleValidacionApi[];
   readonly identificadorSolicitud?: string;
 }
 ```
@@ -160,7 +164,7 @@ Los clientes y servicios se componen en el arranque y se inyectan; no se instanc
 ## Bandeja centrada en la conversación
 
 - `/bandeja` muestra la cola y un estado de selección. `/` redirige a ella.
-- `/bandeja/chat/$id` es hija del layout de bandeja: valida el identificador y carga el contacto; los identificadores desconocidos muestran 404.
+- `/bandeja/chat/$idChat` es hija del layout de bandeja: valida el identificador y carga el contacto; los identificadores desconocidos muestran 404.
 - El layout ocupa el alto disponible hasta el borde inferior. La lista y los mensajes tienen scroll independiente; el encabezado del chat y el compositor permanecen visibles.
 - Las filas de chats llegan al borde de la lista y se separan con divisores. La selección usa un indicador lateral y no tarjetas individuales.
 - En móvil se muestra lista o conversación según la ruta; el chat oculta la navegación inferior y ofrece volver en su encabezado; volver a la lista conserva el layout y sus filtros.
@@ -171,3 +175,35 @@ Los clientes y servicios se componen en el arranque y se inyectan; no se instanc
 - La primera página contiene los mensajes más recientes, ordenados cronológicamente; `cursorAnterior` solicita una página más antigua. `null` termina la paginación. Las páginas antiguas se anteponen conservando la posición visual del historial.
 - El servicio recibe `AbortSignal`. El adaptador HTTP futuro deberá validar respuestas, mantener IDs estables y mapear su cursor opaco a este contrato. No se inventa un endpoint mientras no exista backend.
 - La demostración ofrece 75 mensajes por chat en páginas de 20 para verificar scroll, fin del historial y aislamiento. No se simulan envíos ni asignaciones. No se crea un store ni una mutation sin operaciones reales.
+
+## Contrato de rutas y errores
+
+### Organización y carga diferida
+
+Las funcionalidades tienen carpetas en `src/routes`. Un layout anidado se declara en `route.tsx`, su entrada en `index.tsx` y los parámetros en archivos como `chat/$idChat.tsx`. Las pantallas de negocio siguen en `features`. La raíz queda en `__root.tsx`.
+
+El plugin Vite de TanStack Router se ejecuta antes del plugin React y conserva `autoCodeSplitting: true`. Componentes, pendientes y errores se separan automáticamente por ruta; validaciones y loaders permanecen disponibles para resolver navegación. La raíz es compartida. No se duplican rutas con archivos `.lazy.tsx`. `routeTree.gen.ts` siempre se genera y queda excluido de Biome.
+
+### Identificadores y filtros
+
+- `idChat` es UUID v7, validado por el esquema Zod 4 de `packages/compartido` y normalizado a minúsculas. La futura columna PostgreSQL será `uuid`; su generación v7 corresponderá al servidor al crear el chat. Esta decisión no crea tablas ni migraciones.
+- `params.parse` valida antes del loader. Un ID malformado lanza `notFound()` sin consultar servicios; un UUID inexistente también termina en recurso no encontrado. Se retiran los antiguos IDs nominales de demostración.
+- `validateSearch` valida `busqueda` (texto de hasta 200 caracteres; predeterminado vacío) y `pendientes` (booleano; predeterminado false). Cada campo inválido recupera su predeterminado. No se usa coerción booleana de cadenas.
+- Los filtros viven en la URL, se conservan entre lista y chat y se corrigen con `replace`. Se eliminan valores predeterminados y claves desconocidas. La canonicalización valida nuevamente la búsqueda recibida por el router porque puede contener valores heredados sin validar.
+- El historial usa cursores, no `page`. Para futuras listas paginadas se establece `page` entero positivo con valor 1 cuando falta o es inválido, incluido `page=asa`.
+
+### Presentación y recuperación de errores
+
+Las composiciones de `componentes/errores` distinguen página inexistente, recurso ausente, solicitud API inválida (400), recurso API ausente (404), servicio fallido (500) y fallo inesperado del cliente. Conservan el layout cuando el límite de error lo permite y ofrecen volver a la bandeja. Los errores recuperables permiten reintentar la consulta o invalidar el loader correspondiente.
+
+`lib/cliente-api` normaliza el contrato JSON existente mediante Zod a `ErrorApi`: código, estado HTTP, detalles de validación y referencia de solicitud. No muestra mensajes internos ni stacks. Los mensajes de campos se convierten en instrucciones seguras; los formularios futuros los muestran junto a sus campos. Una respuesta malformada genera `RESPUESTA_INESPERADA`, conservando una referencia válida si existe. Esto no introduce endpoints ni un transporte HTTP ficticio.
+
+Un fallo inicial de mensajes se muestra en la región de conversación. Un fallo al cargar historial se presenta localmente y conserva las páginas existentes. Los errores de API y de cliente se prueban mediante servicios inyectados, sin depender de un backend.
+
+### TypeScript y verificación
+
+React 19 usa `react-jsx`, resolución `Bundler`, `paths` y el alias equivalente de Vite, sin `baseUrl`. Se conservan `vite/client`, `node` y `noUncheckedSideEffectImports`. El editor utiliza TypeScript del workspace mediante `.vscode/settings.json`; no se silencian deprecaciones.
+
+`pnpm verificar` incluye pruebas de contratos y del router en memoria. `pnpm --filter @chatbot-whatsapp/panel verificar:navegador` ejecuta Playwright con Edge instalado, iniciando su servidor local propio. Los escenarios de error son fixtures de pruebas, no rutas del producto. El build de Vite solo incluye la entrada real de la aplicación.
+
+Referencias: [rutas y carga diferida de TanStack](https://tanstack.com/router/latest/docs/guide/code-splitting), [validación de search params](https://tanstack.com/router/latest/docs/how-to/validate-search-params), [notFound](https://tanstack.com/router/latest/docs/guide/not-found-errors).

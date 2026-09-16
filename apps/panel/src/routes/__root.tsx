@@ -1,9 +1,9 @@
 import type { QueryClient } from "@tanstack/react-query";
 import { createRootRouteWithContext } from "@tanstack/react-router";
+import { ErrorRuta } from "@/componentes/errores/error-ruta";
+import { PaginaNoEncontrada } from "@/componentes/errores/pagina-no-encontrada";
 import { LayoutPanel } from "@/componentes/layout/layout-panel";
 import { PantallaCargando } from "@/componentes/layout/pantalla-cargando";
-import { PantallaError } from "@/componentes/layout/pantalla-error";
-import { PantallaNoEncontrada } from "@/componentes/layout/pantalla-no-encontrada";
 import type { ServicioBandeja } from "@/features/bandeja/tipos/servicio-bandeja";
 
 export const Route = createRootRouteWithContext<{
@@ -12,6 +12,6 @@ export const Route = createRootRouteWithContext<{
 }>()({
   component: LayoutPanel,
   pendingComponent: PantallaCargando,
-  errorComponent: PantallaError,
-  notFoundComponent: PantallaNoEncontrada,
+  errorComponent: ErrorRuta,
+  notFoundComponent: PaginaNoEncontrada,
 });

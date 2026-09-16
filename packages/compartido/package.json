@@ -9,5 +9,8 @@
   "scripts": {
     "compilar": "tsc -p tsconfig.json",
     "verificar": "tsc -p tsconfig.json --noEmit"
+  },
+  "dependencies": {
+    "zod": "^4.6.5"
   }
 }

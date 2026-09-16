@@ -10,111 +10,111 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as BandejaRouteImport } from './routes/bandeja'
-import { Route as BotRouteImport } from './routes/bot'
-import { Route as ConfiguracionRouteImport } from './routes/configuracion'
-import { Route as ContactosRouteImport } from './routes/contactos'
-import { Route as BandejaIndexRouteImport } from './routes/bandeja.index'
-import { Route as BandejaChatIdRouteImport } from './routes/bandeja.chat.$id'
+import { Route as BandejaRouteRouteImport } from './routes/bandeja/route'
+import { Route as BandejaIndexRouteImport } from './routes/bandeja/index'
+import { Route as BotIndexRouteImport } from './routes/bot/index'
+import { Route as ConfiguracionIndexRouteImport } from './routes/configuracion/index'
+import { Route as ContactosIndexRouteImport } from './routes/contactos/index'
+import { Route as BandejaChatIdChatRouteImport } from './routes/bandeja/chat/$idChat'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const BandejaRoute = BandejaRouteImport.update({
+const BandejaRouteRoute = BandejaRouteRouteImport.update({
   id: '/bandeja',
   path: '/bandeja',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const BotRoute = BotRouteImport.update({
-  id: '/bot',
-  path: '/bot',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ConfiguracionRoute = ConfiguracionRouteImport.update({
-  id: '/configuracion',
-  path: '/configuracion',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ContactosRoute = ContactosRouteImport.update({
-  id: '/contactos',
-  path: '/contactos',
   getParentRoute: () => rootRouteImport,
 } as any)
 const BandejaIndexRoute = BandejaIndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => BandejaRoute,
+  getParentRoute: () => BandejaRouteRoute,
 } as any)
-const BandejaChatIdRoute = BandejaChatIdRouteImport.update({
-  id: '/chat/$id',
-  path: '/chat/$id',
-  getParentRoute: () => BandejaRoute,
+const BotIndexRoute = BotIndexRouteImport.update({
+  id: '/bot/',
+  path: '/bot/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ConfiguracionIndexRoute = ConfiguracionIndexRouteImport.update({
+  id: '/configuracion/',
+  path: '/configuracion/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContactosIndexRoute = ContactosIndexRouteImport.update({
+  id: '/contactos/',
+  path: '/contactos/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BandejaChatIdChatRoute = BandejaChatIdChatRouteImport.update({
+  id: '/chat/$idChat',
+  path: '/chat/$idChat',
+  getParentRoute: () => BandejaRouteRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/bandeja': typeof BandejaRouteWithChildren
-  '/bot': typeof BotRoute
-  '/configuracion': typeof ConfiguracionRoute
-  '/contactos': typeof ContactosRoute
+  '/bandeja': typeof BandejaRouteRouteWithChildren
   '/bandeja/': typeof BandejaIndexRoute
-  '/bandeja/chat/$id': typeof BandejaChatIdRoute
+  '/bot/': typeof BotIndexRoute
+  '/configuracion/': typeof ConfiguracionIndexRoute
+  '/contactos/': typeof ContactosIndexRoute
+  '/bandeja/chat/$idChat': typeof BandejaChatIdChatRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/bot': typeof BotRoute
-  '/configuracion': typeof ConfiguracionRoute
-  '/contactos': typeof ContactosRoute
   '/bandeja': typeof BandejaIndexRoute
-  '/bandeja/chat/$id': typeof BandejaChatIdRoute
+  '/bot': typeof BotIndexRoute
+  '/configuracion': typeof ConfiguracionIndexRoute
+  '/contactos': typeof ContactosIndexRoute
+  '/bandeja/chat/$idChat': typeof BandejaChatIdChatRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/bandeja': typeof BandejaRouteWithChildren
-  '/bot': typeof BotRoute
-  '/configuracion': typeof ConfiguracionRoute
-  '/contactos': typeof ContactosRoute
+  '/bandeja': typeof BandejaRouteRouteWithChildren
   '/bandeja/': typeof BandejaIndexRoute
-  '/bandeja/chat/$id': typeof BandejaChatIdRoute
+  '/bot/': typeof BotIndexRoute
+  '/configuracion/': typeof ConfiguracionIndexRoute
+  '/contactos/': typeof ContactosIndexRoute
+  '/bandeja/chat/$idChat': typeof BandejaChatIdChatRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
     | '/bandeja'
-    | '/bot'
-    | '/configuracion'
-    | '/contactos'
     | '/bandeja/'
-    | '/bandeja/chat/$id'
+    | '/bot/'
+    | '/configuracion/'
+    | '/contactos/'
+    | '/bandeja/chat/$idChat'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/bandeja'
     | '/bot'
     | '/configuracion'
     | '/contactos'
-    | '/bandeja'
-    | '/bandeja/chat/$id'
+    | '/bandeja/chat/$idChat'
   id:
     | '__root__'
     | '/'
     | '/bandeja'
-    | '/bot'
-    | '/configuracion'
-    | '/contactos'
     | '/bandeja/'
-    | '/bandeja/chat/$id'
+    | '/bot/'
+    | '/configuracion/'
+    | '/contactos/'
+    | '/bandeja/chat/$idChat'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  BandejaRoute: typeof BandejaRouteWithChildren
-  BotRoute: typeof BotRoute
-  ConfiguracionRoute: typeof ConfiguracionRoute
-  ContactosRoute: typeof ContactosRoute
+  BandejaRouteRoute: typeof BandejaRouteRouteWithChildren
+  BotIndexRoute: typeof BotIndexRoute
+  ConfiguracionIndexRoute: typeof ConfiguracionIndexRoute
+  ContactosIndexRoute: typeof ContactosIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -130,28 +130,7 @@ declare module '@tanstack/react-router' {
       id: '/bandeja'
       path: '/bandeja'
       fullPath: '/bandeja'
-      preLoaderRoute: typeof BandejaRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/bot': {
-      id: '/bot'
-      path: '/bot'
-      fullPath: '/bot'
-      preLoaderRoute: typeof BotRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/configuracion': {
-      id: '/configuracion'
-      path: '/configuracion'
-      fullPath: '/configuracion'
-      preLoaderRoute: typeof ConfiguracionRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/contactos': {
-      id: '/contactos'
-      path: '/contactos'
-      fullPath: '/contactos'
-      preLoaderRoute: typeof ContactosRouteImport
+      preLoaderRoute: typeof BandejaRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/bandeja/': {
@@ -159,37 +138,59 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/bandeja/'
       preLoaderRoute: typeof BandejaIndexRouteImport
-      parentRoute: typeof BandejaRoute
+      parentRoute: typeof BandejaRouteRoute
     }
-    '/bandeja/chat/$id': {
-      id: '/bandeja/chat/$id'
-      path: '/chat/$id'
-      fullPath: '/bandeja/chat/$id'
-      preLoaderRoute: typeof BandejaChatIdRouteImport
-      parentRoute: typeof BandejaRoute
+    '/bot/': {
+      id: '/bot/'
+      path: '/bot'
+      fullPath: '/bot/'
+      preLoaderRoute: typeof BotIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/configuracion/': {
+      id: '/configuracion/'
+      path: '/configuracion'
+      fullPath: '/configuracion/'
+      preLoaderRoute: typeof ConfiguracionIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contactos/': {
+      id: '/contactos/'
+      path: '/contactos'
+      fullPath: '/contactos/'
+      preLoaderRoute: typeof ContactosIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/bandeja/chat/$idChat': {
+      id: '/bandeja/chat/$idChat'
+      path: '/chat/$idChat'
+      fullPath: '/bandeja/chat/$idChat'
+      preLoaderRoute: typeof BandejaChatIdChatRouteImport
+      parentRoute: typeof BandejaRouteRoute
     }
   }
 }
 
-interface BandejaRouteChildren {
+interface BandejaRouteRouteChildren {
   BandejaIndexRoute: typeof BandejaIndexRoute
-  BandejaChatIdRoute: typeof BandejaChatIdRoute
+  BandejaChatIdChatRoute: typeof BandejaChatIdChatRoute
 }
 
-const BandejaRouteChildren: BandejaRouteChildren = {
+const BandejaRouteRouteChildren: BandejaRouteRouteChildren = {
   BandejaIndexRoute: BandejaIndexRoute,
-  BandejaChatIdRoute: BandejaChatIdRoute,
+  BandejaChatIdChatRoute: BandejaChatIdChatRoute,
 }
 
-const BandejaRouteWithChildren =
-  BandejaRoute._addFileChildren(BandejaRouteChildren)
+const BandejaRouteRouteWithChildren = BandejaRouteRoute._addFileChildren(
+  BandejaRouteRouteChildren,
+)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  BandejaRoute: BandejaRouteWithChildren,
-  BotRoute: BotRoute,
-  ConfiguracionRoute: ConfiguracionRoute,
-  ContactosRoute: ContactosRoute,
+  BandejaRouteRoute: BandejaRouteRouteWithChildren,
+  BotIndexRoute: BotIndexRoute,
+  ConfiguracionIndexRoute: ConfiguracionIndexRoute,
+  ContactosIndexRoute: ContactosIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

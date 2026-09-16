@@ -2,7 +2,7 @@ import type { ConversacionDemostracion } from "../tipos/tipos-conversacion-demos
 
 export const conversacionesDemostracion: readonly ConversacionDemostracion[] = [
   {
-    id: "andrea-lopez",
+    id: "01994bd0-1234-7000-8000-000000000001",
     nombre: "Andrea López",
     iniciales: "AL",
     resumen: "Quisiera hablar con un asesor.",
@@ -11,7 +11,7 @@ export const conversacionesDemostracion: readonly ConversacionDemostracion[] = [
     mensajesSinLeer: 2,
   },
   {
-    id: "miguel-cruz",
+    id: "01994bd0-1234-7000-8000-000000000002",
     nombre: "Miguel Cruz",
     iniciales: "MC",
     resumen: "El bot ya respondió mi consulta.",
@@ -20,7 +20,7 @@ export const conversacionesDemostracion: readonly ConversacionDemostracion[] = [
     mensajesSinLeer: 0,
   },
   {
-    id: "sofia-reyes",
+    id: "01994bd0-1234-7000-8000-000000000003",
     nombre: "Sofía Reyes",
     iniciales: "SR",
     resumen: "Gracias, quedo pendiente de la cotización.",
@@ -29,7 +29,7 @@ export const conversacionesDemostracion: readonly ConversacionDemostracion[] = [
     mensajesSinLeer: 0,
   },
   {
-    id: "daniel-mendez",
+    id: "01994bd0-1234-7000-8000-000000000004",
     nombre: "Daniel Méndez",
     iniciales: "DM",
     resumen: "Necesito actualizar mis datos.",

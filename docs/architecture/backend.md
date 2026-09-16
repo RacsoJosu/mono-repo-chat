@@ -163,3 +163,7 @@ Los webhooks de Meta responden rápido: validan, deduplican por identificador de
 
 
 Las categorías de `ErrorAplicacion` son `validacion`, `no_autenticado`, `no_autorizado`, `no_encontrado`, `conflicto` e `interno`. El adaptador HTTP las traduce a estados mediante sus constantes. Los detalles de validación contienen únicamente `campo`, `regla` y `mensaje` seguro; nunca se devuelve `ZodError.issues` directamente.
+
+## Identificadores de chat
+
+El contrato público `idChat` utiliza UUID v7 y el esquema Zod 4 compartido en `packages/compartido`. Los identificadores se normalizan a minúsculas. Al implementar persistencia, la columna será PostgreSQL `uuid` y el servidor generará UUID v7 al crear chats; esta convención no introduce tablas ni migraciones anticipadas. Los endpoints futuros reutilizarán ese esquema y devolverán el contrato JSON global, nunca pantallas HTML.
