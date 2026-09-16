@@ -1,9 +1,9 @@
 import assert from "node:assert/strict";
-import { test } from "node:test";
 import Fastify from "fastify";
+import { test } from "vitest";
 import { z } from "zod";
-import { ErrorAplicacion } from "../src/compartido/errores/error-aplicacion.js";
-import { registrarManejadorErrores } from "../src/compartido/errores/manejador-errores.plugin.js";
+import { ErrorAplicacion } from "../error-aplicacion.js";
+import { registrarManejadorErrores } from "../manejador-errores.plugin.js";
 
 test("traduce categorías de aplicación a HTTP y conserva el contrato", async () => {
   const aplicacion = Fastify();

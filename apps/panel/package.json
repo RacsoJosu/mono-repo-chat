@@ -7,7 +7,9 @@
     "verificar:navegador": "playwright test",
     "desarrollo": "vite",
     "compilar": "tsr generate && tsc -p tsconfig.json --noEmit && vite build",
-    "verificar": "tsr generate && tsc -p tsconfig.json --noEmit && tsx --test pruebas/*.test.ts"
+    "verificar": "tsr generate && tsc -p tsconfig.json --noEmit && tsc -p tsconfig.pruebas.json --noEmit && vitest run",
+    "probar": "tsr generate && vitest run",
+    "probar:observar": "tsr generate && vitest"
   },
   "dependencies": {
     "@chatbot-whatsapp/compartido": "workspace:*",
@@ -31,13 +33,17 @@
     "@tailwindcss/vite": "^4.0.0",
     "@tanstack/router-cli": "^1.167.36",
     "@tanstack/router-plugin": "^1.168.38",
+    "@testing-library/jest-dom": "^7.0.1",
+    "@testing-library/react": "^16.3.3",
+    "@testing-library/user-event": "^14.6.7",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
     "@vitejs/plugin-react": "^5.0.0",
+    "jsdom": "^30.0.1",
     "tailwind-merge": "^3.0.0",
     "tailwindcss": "^4.0.0",
-    "tsx": "^4.23.13",
     "tw-animate-css": "^1.3.0",
-    "vite": "^7.0.0"
+    "vite": "^7.0.0",
+    "vitest": "^5.0.0"
   }
 }

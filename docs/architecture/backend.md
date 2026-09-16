@@ -167,3 +167,13 @@ Las categorías de `ErrorAplicacion` son `validacion`, `no_autenticado`, `no_aut
 ## Identificadores de chat
 
 El contrato público `idChat` utiliza UUID v7 y el esquema Zod 4 compartido en `packages/compartido`. Los identificadores se normalizan a minúsculas. Al implementar persistencia, la columna será PostgreSQL `uuid` y el servidor generará UUID v7 al crear chats; esta convención no introduce tablas ni migraciones anticipadas. Los endpoints futuros reutilizarán ese esquema y devolverán el contrato JSON global, nunca pantallas HTML.
+
+## Pruebas por módulo
+
+- Cada módulo reúne sus pruebas en `src/modulos/<modulo>/pruebas/*.test.ts`. Los helpers y datos propios permanecen junto a la suite. No se crean carpetas vacías para módulos futuros.
+- La infraestructura transversal conserva sus pruebas junto a su dueño: el contrato global de errores se prueba en `src/compartido/errores/pruebas`.
+- Vitest es el ejecutor, con entorno Node e imports explícitos. Se mantiene la misma versión que el panel. Los flujos HTTP usan Fastify `inject`, cerrando la instancia al finalizar y sin abrir puertos.
+- `pnpm --filter @chatbot-whatsapp/api probar` ejecuta la suite; `probar:observar` la mantiene observando cambios. `pnpm probar` ejecuta las suites de ambas apps mediante Turbo.
+- `tsconfig.pruebas.json` verifica las pruebas y la configuración sin emitir. El tsconfig productivo excluye `src/**/pruebas/**` para no distribuirlas en `dist`.
+- Los servicios se prueban mediante dependencias inyectadas. No se agregan módulos, endpoints o integraciones de producción para montar escenarios de prueba.
+- Toda nueva funcionalidad o corrección sigue TDD: fallo observable primero, implementación mínima después y refactorización con pruebas verdes. Las migraciones de ejecutor preservan las suites existentes. No se exige un porcentaje artificial de cobertura.

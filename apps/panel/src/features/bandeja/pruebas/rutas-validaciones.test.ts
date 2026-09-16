@@ -1,13 +1,13 @@
 import assert from "node:assert/strict";
-import { test } from "node:test";
 import { esquemaIdChat } from "@chatbot-whatsapp/compartido";
 import { QueryClient } from "@tanstack/react-query";
 import { createMemoryHistory, createRouter } from "@tanstack/react-router";
-import { conversacionesDemostracion } from "../src/features/bandeja/constantes/conversaciones-demostracion";
-import { crearServicioBandejaDemostracion } from "../src/features/bandeja/services/bandeja-demostracion.service";
-import { validarBusquedaBandeja } from "../src/features/bandeja/validaciones/busqueda-bandeja";
-import { validarParametrosChat } from "../src/features/bandeja/validaciones/parametros-chat";
-import { routeTree } from "../src/routeTree.gen";
+import { test } from "vitest";
+import { conversacionesDemostracion } from "@/features/bandeja/constantes/conversaciones-demostracion";
+import { crearServicioBandejaDemostracion } from "@/features/bandeja/services/bandeja-demostracion.service";
+import { validarBusquedaBandeja } from "@/features/bandeja/validaciones/busqueda-bandeja";
+import { validarParametrosChat } from "@/features/bandeja/validaciones/parametros-chat";
+import { routeTree } from "@/routeTree.gen";
 
 test("acepta UUID v7 y rechaza versiones distintas e IDs nominales", () => {
   assert.ok(esquemaIdChat.safeParse(conversacionesDemostracion[0].id).success);

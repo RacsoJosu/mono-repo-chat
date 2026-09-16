@@ -207,3 +207,15 @@ React 19 usa `react-jsx`, resolución `Bundler`, `paths` y el alias equivalente 
 `pnpm verificar` incluye pruebas de contratos y del router en memoria. `pnpm --filter @chatbot-whatsapp/panel verificar:navegador` ejecuta Playwright con Edge instalado, iniciando su servidor local propio. Los escenarios de error son fixtures de pruebas, no rutas del producto. El build de Vite solo incluye la entrada real de la aplicación.
 
 Referencias: [rutas y carga diferida de TanStack](https://tanstack.com/router/latest/docs/guide/code-splitting), [validación de search params](https://tanstack.com/router/latest/docs/how-to/validate-search-params), [notFound](https://tanstack.com/router/latest/docs/guide/not-found-errors).
+
+## Pruebas por funcionalidad
+
+- Cada feature reúne sus suites en `features/<funcionalidad>/pruebas`. Los archivos `*.test.ts` y `*.test.tsx` usan Vitest; `navegador/*.spec.ts` usa Playwright. Datos, escenarios y helpers exclusivos de una suite viven en esa misma carpeta.
+- Las pruebas transversales pertenecen a su implementación: por ejemplo, `lib/cliente-api/pruebas`. No se mezclan con bandeja ni se mantienen suites globales por tipo técnico.
+- `vitest.config.ts` usa jsdom, React Testing Library, user-event y jest-dom, con imports explícitos de Vitest. Comparte el alias con Vite, pero no ejecuta los plugins de generación de rutas, carga diferida ni Tailwind. Los scripts generan el árbol antes de probar.
+- `configuracion/preparar-pruebas.ts` contiene únicamente preparación y limpieza transversal. Cada prueba de bandeja crea sus proveedores, router y QueryClient; cancela consultas y limpia recursos al finalizar. Los dobles se limitan a fronteras inyectadas y APIs que jsdom no implementa.
+- Playwright conserva navegación real, recarga, atrás/adelante, scroll y dimensiones móviles. Sus escenarios están dentro de bandeja y se sirven solo durante las pruebas; no son rutas del producto.
+- `pnpm probar` ejecuta las suites Vitest mediante Turbo. `pnpm --filter @chatbot-whatsapp/panel probar` ejecuta el panel; `probar:observar` activa observación. `verificar:navegador` sigue siendo independiente.
+- `tsconfig.pruebas.json` comprueba pruebas y configuración sin emitir archivos. La configuración productiva excluye carpetas `pruebas`; Vite compila únicamente la entrada real.
+- Para nuevas funcionalidades o correcciones: escribir una prueba de comportamiento, observar el fallo esperado, implementar lo mínimo y refactorizar manteniéndola verde. Al migrar suites existentes se conserva su cobertura, sin reescribir código funcional para generar fallos artificiales.
+- No se escriben pruebas que inspeccionen texto de configuración, detalles privados o constantes aisladas. Se comprueban resultados observables con expectativas independientes. No hay porcentaje de cobertura obligatorio.

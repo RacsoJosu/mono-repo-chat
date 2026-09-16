@@ -7,7 +7,8 @@
     "compilar": "turbo run compilar",
     "verificar": "biome check . && turbo run verificar",
     "formatear": "biome format --write .",
-    "revisar": "biome check ."
+    "revisar": "biome check .",
+    "probar": "turbo run probar"
   },
   "devDependencies": {
     "@types/node": "^22.0.0",

@@ -12,5 +12,6 @@
     },
     "noEmit": true
   },
-  "include": ["src", "vite.config.ts", "playwright.config.ts", "pruebas", "pruebas-navegador"]
+  "include": ["src", "vite.config.ts", "configuracion/constantes/alias.ts"],
+  "exclude": ["src/**/pruebas/**"]
 }

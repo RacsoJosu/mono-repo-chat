@@ -65,7 +65,9 @@ test("pantallas API 400, 404, 500 y error cliente son seguras y recuperables", a
     ["500", "El servicio no está disponible"],
     ["cliente", "Ocurrió un error en la aplicación"],
   ]) {
-    await page.goto(`/pruebas-navegador/escenarios.html?escenario=${escenario}`);
+    await page.goto(
+      `/src/features/bandeja/pruebas/navegador/escenarios.html?escenario=${escenario}`,
+    );
     await expect(page.getByRole("heading", { name: titulo })).toBeVisible();
     await expect(page.getByText("SQL secreto")).toHaveCount(0);
     if (escenario === "500" || escenario === "cliente") {
@@ -75,11 +77,11 @@ test("pantallas API 400, 404, 500 y error cliente son seguras y recuperables", a
   }
 });
 test("fallo de consulta inicial y de historial preservan recuperación", async ({ page }) => {
-  await page.goto("/pruebas-navegador/escenarios.html?escenario=consulta");
+  await page.goto("/src/features/bandeja/pruebas/navegador/escenarios.html?escenario=consulta");
   await expect(page.getByRole("heading", { name: "El servicio no está disponible" })).toBeVisible();
   await page.getByRole("button", { name: "Reintentar", exact: true }).click();
   await expect(page.locator("[data-mensaje-id]")).toHaveCount(20);
-  await page.goto("/pruebas-navegador/escenarios.html?escenario=historial");
+  await page.goto("/src/features/bandeja/pruebas/navegador/escenarios.html?escenario=historial");
   await expect(page.locator("[data-mensaje-id]")).toHaveCount(20);
   await page.getByLabel("Mensajes de la conversación").evaluate((elemento) => {
     elemento.scrollTop = 0;

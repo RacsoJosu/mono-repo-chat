@@ -6,7 +6,9 @@
   "scripts": {
     "desarrollo": "tsx watch src/server.ts",
     "compilar": "tsc -p tsconfig.json",
-    "verificar": "tsc -p tsconfig.json --noEmit && tsx --test pruebas/*.test.ts"
+    "verificar": "tsc -p tsconfig.json --noEmit && tsc -p tsconfig.pruebas.json --noEmit && vitest run",
+    "probar": "vitest run",
+    "probar:observar": "vitest"
   },
   "dependencies": {
     "@chatbot-whatsapp/compartido": "workspace:*",
@@ -15,6 +17,7 @@
     "zod": "^3.0.0"
   },
   "devDependencies": {
-    "tsx": "^4.0.0"
+    "tsx": "^4.0.0",
+    "vitest": "^5.0.0"
   }
 }

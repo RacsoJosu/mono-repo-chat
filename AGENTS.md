@@ -64,3 +64,13 @@
 - ¿Los errores siguen el contrato global?
 - ¿Las mutaciones invalidan o actualizan la caché correcta?
 - ¿El cambio actualizó la documentación cuando introdujo una convención o decisión nueva?
+
+## Pruebas y TDD
+
+- Vitest ejecuta las pruebas unitarias y de integración del panel y API; Playwright conserva los flujos reales de navegador.
+- Agrupa las pruebas de frontend en `features/<funcionalidad>/pruebas` y las de backend en `modulos/<modulo>/pruebas`. Las pruebas transversales viven junto a su implementación, en su propia carpeta `pruebas`.
+- Usa `*.test.ts` / `*.test.tsx` para Vitest y `pruebas/navegador/*.spec.ts` para Playwright. No disperses suites junto a cada archivo ni crees carpetas vacías.
+- Para comportamiento nuevo o correcciones, aplica TDD: prueba que falla por la causa esperada, cambio mínimo y refactorización. Una migración de ejecutor conserva las pruebas y el comportamiento existentes.
+- Prueba resultados observables con dependencias reales o fronteras inyectadas; no inspecciones texto de código o configuración ni dupliques lógica productiva en expectativas.
+- Aísla y limpia QueryClient, proveedores e instancias de servidor por prueba. Ninguna prueba ni escenario se incluye en artefactos productivos.
+- `pnpm probar` ejecuta Vitest mediante Turbo; `pnpm verificar` comprueba formato, tipos productivos, tipos de pruebas y suites. Ejecuta Playwright cuando se afecten flujos de navegador.
