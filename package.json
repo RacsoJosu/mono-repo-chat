@@ -1,0 +1,23 @@
+{
+  "name": "chatbot-whatsapp",
+  "private": true,
+  "packageManager": "pnpm@11.0.9",
+  "scripts": {
+    "desarrollo": "turbo run desarrollo",
+    "compilar": "turbo run compilar",
+    "verificar": "biome check . && turbo run verificar",
+    "formatear": "biome format --write .",
+    "revisar": "biome check .",
+    "probar": "turbo run probar"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "@biomejs/biome": "^2.3.11",
+    "turbo": "^2.0.0",
+    "typescript": "^5.0.0"
+  },
+  "engines": {
+    "node": ">=24.15.0 <25",
+    "pnpm": ">=11"
+  }
+}

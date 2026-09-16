@@ -1,0 +1,16 @@
+{
+  "name": "@chatbot-whatsapp/compartido",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "compilar": "tsc -p tsconfig.json",
+    "verificar": "tsc -p tsconfig.json --noEmit"
+  },
+  "dependencies": {
+    "zod": "^4.6.5"
+  }
+}
