@@ -82,3 +82,55 @@ Para integración PostgreSQL, configura URL_BASE_DE_DATOS_PRUEBAS con una base l
 - [Bandeja, cursores, RLS y seeder](docs/architecture/bandeja.md)
 - [Sesiones del panel](docs/architecture/frontend/sesion.md)
 - [Backend](docs/architecture/backend.md) y [frontend](docs/architecture/frontend.md)
+
+## Tecnologías
+
+React 19, Vite, TanStack Router y Query, Tailwind CSS v4, shadcn/ui, Fastify, Zod, PostgreSQL y Drizzle. El monorepo usa pnpm, Turborepo y Biome; las pruebas usan Vitest, Testing Library y Playwright.
+
+## Estructura
+
+```text
+apps/
+  panel/           Interfaz de agentes
+  api/             API HTTP y módulos de negocio
+  worker/          Base para procesamiento asíncrono
+packages/
+  compartido/      Contratos, validaciones y tipos compartidos
+  base-datos/      Base de infraestructura PostgreSQL y Drizzle
+  interfaz/        Espacio para componentes compartidos
+  configuracion/   Convenciones de configuración
+docs/architecture/ Arquitectura y dirección visual
+```
+
+Las rutas del panel viven en `src/routes` y sus funcionalidades en `src/features`. El backend organiza sus capacidades en `src/modulos`.
+
+## Comandos
+
+| Comando | Propósito |
+| --- | --- |
+| `pnpm desarrollo` | Iniciar las aplicaciones en desarrollo |
+| `pnpm compilar` | Compilar los paquetes y aplicaciones |
+| `pnpm formatear` | Aplicar formato con Biome |
+| `pnpm revisar` | Revisar formato y lint |
+| `pnpm verificar` | Revisar formato, tipos y suites Vitest |
+| `pnpm probar` | Ejecutar las suites Vitest mediante Turbo |
+| `pnpm --filter @chatbot-whatsapp/panel probar:observar` | Observar las pruebas del frontend |
+| `pnpm --filter @chatbot-whatsapp/api probar:observar` | Observar las pruebas del backend |
+| `pnpm --filter @chatbot-whatsapp/panel verificar:navegador` | Ejecutar los flujos Playwright |
+
+Playwright inicia su propio servidor local en el puerto 4181.
+
+## Pruebas y contribución
+
+- Frontend: `features/<funcionalidad>/pruebas`, con Vitest y Testing Library.
+- Backend: `modulos/<modulo>/pruebas`, con Vitest y Fastify `inject`.
+- Las pruebas transversales permanecen junto a su implementación.
+- Los flujos Playwright se agrupan en `pruebas/navegador` dentro de la funcionalidad.
+- Los cambios de comportamiento siguen TDD: prueba que reproduce el fallo, implementación mínima y refactorización.
+- Antes de entregar cambios, ejecuta `pnpm verificar`; ejecuta Playwright cuando afectes flujos de navegador.
+
+Consulta las [convenciones de contribución](AGENTS.md) antes de modificar el código.
+
+## Licencia
+
+[MIT](LICENSE).
